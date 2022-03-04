@@ -63,7 +63,7 @@ public class UploadServlet extends HttpServlet {
                 .stream()
                 .filter( part -> "file".equals(part.getName()))
                 .collect(Collectors.toList());
-                String imagesFolder = "D:\\UploadDir\\WebPasswordManager";
+                String imagesFolder = "D:\\ShoesUpload\\WebShoeShop";
 //                String imagesFolder = ResourceBundle.getBundle("resouces/directories").getString("uploadDir");
                 for(Part filePart : fileParts){
                     String pathToFile = imagesFolder + File.separatorChar

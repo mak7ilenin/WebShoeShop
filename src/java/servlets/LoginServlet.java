@@ -25,7 +25,6 @@ import session.UserFacade;
 @WebServlet(name = "LoginServlet",loadOnStartup = 1, urlPatterns = {
     "/showLogin",
     "/index",
-    "/signUp"
 })
 public class LoginServlet extends HttpServlet {
     @EJB UserFacade userFacade;
@@ -94,10 +93,6 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("authUser", authUser);
                 request.setAttribute("info", "Привет, "+authUser.getFirstName());
                 request.getRequestDispatcher("/listAccounts").forward(request, response);
-                break;
-            case "/signUp":
-                HttpSession session1 = request.getSession(true);
-                request.getRequestDispatcher("/signUp.jsp").forward(request, response);
                 break;
         }
     }

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : Feb 10, 2022, 12:30:21 PM
-    Author     : Melnikov
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div style="margin: 60px">
     <h1 class="text-primary align-items-center" style="text-align: center">WebShoeShop</h1>
@@ -22,10 +16,7 @@
               <small id="password" hidden class="form-text text-muted">Error</small>
             </div>
             <input class="btn btn-primary mt-5" type="submit" value="Войти">
-            <!--<button name="signUp" class="btn btn-primary mt-2">Зарегистрироваться</button>-->
-            </form>
-            <form action="signUp" method="POST">
-                <input class="btn btn-primary mt-2" value="Зарегистрироваться" type="submit">
+            <a class="btn btn-primary mt-2" href="signUp.jsp">Зарегистрироваться</a>
             </form>
           </div>
     </div>
