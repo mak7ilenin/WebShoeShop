@@ -1,59 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import entity.User;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import session.UserFacade;
 
-/**
- *
- * @author jvm
- */
 
-@WebServlet(name = "LoginServlet",loadOnStartup = 1, urlPatterns = {
-    "/showLogin",
-    "/index",
+@WebServlet(name = "RegistrationServlet",loadOnStartup = 1, urlPatterns = {
+    "/showSignUp",
+    "/signUp",
 })
-public class LoginServlet extends HttpServlet {
-    @EJB UserFacade userFacade;
-    
-    
-    @Override
-    public void init() throws ServletException {
-        super.init(); //To change body of generated methods, choose Tools | Templates.
-        if(userFacade.count()>1) return;
-        User user = new User();
-        user.setFirstName("Maksim");
-        user.setLastName("Dzjubenko");
-        user.setPhone("53005207");
-        user.setLogin("admin");
-        user.setPassword("12345");
-        user.setListAccountBox(new ArrayList<>());
-        userFacade.create(user);
-        
-        
-        User user1 = new User();
-        user1.setFirstName("Daniil");
-        user1.setLastName("Vasilek");
-        user1.setPhone("55558888");
-        user1.setLogin("dan");
-        user1.setPassword("123");
-        user1.setListAccountBox(new ArrayList<>());
-        userFacade.create(user1);
-    } 
-        
+public class RegistrationServlet extends HttpServlet {
+    @EJB UserFacade userFacade; 
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -64,32 +27,60 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
          request.setCharacterEncoding("UTF-8");
          String path = request.getServletPath();
         switch (path) {
-            case "/index":
+            case "/showSignUp":
+                request.getRequestDispatcher("/signUp").forward(request, response);
+                break;
+            case "/signUp":
+                String firstName = request.getParameter("firstName");
+                String lastName = request.getParameter("lastName");
+                String phone = request.getParameter("phone");
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
-                //Authentification
-                User authUser = userFacade.findByLogin(login);
-                if(authUser == null){
-                    request.setAttribute("info", "Неверный логин или пароль");
-                    request.getRequestDispatcher("/showLogin").forward(request, response);
+                
+                User user = new User();
+                if(firstName == null){
+                    request.setAttribute("info", "Одно или несколько полей не заполнены");
+                    request.getRequestDispatcher("/signUp").forward(request, response);
                     break;
                 }
-                //Authorization
-                if(!password.equals(authUser.getPassword())){
-                    request.setAttribute("info", "Неверный логин или пароль");
-                    request.getRequestDispatcher("/showLogin").forward(request, response);
+                if(lastName == null){
+                    request.setAttribute("info", "Одно или несколько полей не заполнены");
+                    request.getRequestDispatcher("/signUp").forward(request, response);
                     break;
                 }
-                HttpSession session = request.getSession(true);
-                session.setAttribute("authUser", authUser);
-                request.setAttribute("info", "Приветствуем вас, "+authUser.getFirstName() + "!");
-                request.getRequestDispatcher("/listAccounts").forward(request, response);
+                if(phone == null){
+                    request.setAttribute("info", "Одно или несколько полей не заполнены");
+                    request.getRequestDispatcher("/signUp").forward(request, response);
+                    break;
+                }
+                if(login == null){
+                    request.setAttribute("info", "Одно или несколько полей не заполнены");
+                    request.getRequestDispatcher("/signUp").forward(request, response);
+                    break;
+                }
+                if(password == null){
+                    request.setAttribute("info", "Одно или несколько полей не заполнены");
+                    request.getRequestDispatcher("/signUp").forward(request, response);
+                    break;
+                }
+
+                try {
+                    userFacade.create(user);
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setPhone(phone);
+                    user.setLogin(login);
+                    user.setPassword(password);
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не удалось зарегистрироваться");
+                }
                 break;
         }
     }

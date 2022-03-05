@@ -28,6 +28,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String phone;
+    private double money;
     private String login;
     private String password;
     private String salt;
@@ -44,6 +45,7 @@ public class User implements Serializable {
         hash = 73 * hash + Objects.hashCode(this.firstName);
         hash = 73 * hash + Objects.hashCode(this.lastName);
         hash = 73 * hash + Objects.hashCode(this.phone);
+        hash = 73 * hash + Objects.hashCode(this.money);
         hash = 73 * hash + Objects.hashCode(this.login);
         hash = 73 * hash + Objects.hashCode(this.password);
         hash = 73 * hash + Objects.hashCode(this.salt);
@@ -71,6 +73,9 @@ public class User implements Serializable {
         if (!Objects.equals(this.phone, other.phone)) {
             return false;
         }
+        if (!Objects.equals(this.money, other.money)) {
+            return false;
+        }
         if (!Objects.equals(this.login, other.login)) {
             return false;
         }
@@ -94,6 +99,7 @@ public class User implements Serializable {
                 + ", firstName=" + firstName
                 + ", lastName=" + lastName 
                 + ", phone=" + phone 
+                + ", money=" + money
                 + ", login=" + login 
                 + ", password=" + password 
                 + ", salt=" + salt 
@@ -162,6 +168,14 @@ public class User implements Serializable {
 
     public void setListAccountBox(List<AccountBox> listAccountBox) {
         this.listAccountBox = listAccountBox;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 
   
