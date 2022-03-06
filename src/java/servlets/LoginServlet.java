@@ -79,7 +79,6 @@ public class LoginServlet extends HttpServlet {
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "/index":
-                request.setAttribute("info", "");
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
                 //Authentification
