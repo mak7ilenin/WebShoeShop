@@ -30,6 +30,7 @@ public class ModelBox implements Serializable {
     private Model model;
 
     public ModelBox() {
+        
     }
     
     

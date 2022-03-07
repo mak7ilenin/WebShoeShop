@@ -32,9 +32,9 @@
             </div>
             <div class="form-group">
                 <label for="model" class="form-label mt-4">Url изображения</label>
-                <select class="form-select"  id="model" name="model">
-                    <c:forEach var="begin" items="${models}">
-                        <option value="${model.id}" <c:if test="${model.id eq model}">selected</c:if>>${model.description}</option>
+                <select class="form-select" id="model" name="model">
+                    <c:forEach var="model" items="${models}">
+                        <option value="${shoe.id}" <c:if test="${shoe.id eq model}">selected</c:if>>${shoe.description}</option>
                     </c:forEach>
                 </select>
             </div>

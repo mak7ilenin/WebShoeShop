@@ -93,13 +93,13 @@ public class MyServlet extends HttpServlet {
                     request.getRequestDispatcher("/addModelBox").forward(request, response);
                     break;
                 }
-                Model mod = null;
+                Model shoe = null;
                 try {
-                    mod = modelFacade.find(Long.parseLong(model));
+                    shoe = modelFacade.find(Long.parseLong(model));
                     ModelBox modelBox = new ModelBox();
                     modelBox.setModelName(modelName);
                     modelBox.setModelSize(modelSize);
-                    modelBox.setModel(mod);
+                    modelBox.setModel(shoe);
                     modelBox.setPrice(price);
                     modelBox.setModelFirm(modelFirm);
                     modelBox.setUrl(url);
@@ -111,7 +111,7 @@ public class MyServlet extends HttpServlet {
                     request.setAttribute("info", "Данные записаны успешно");
                     request.getRequestDispatcher("/addModelBox").forward(request, response);
                 } catch (Exception e) {
-                    request.setAttribute("info", "Заполните все поля");
+                    request.setAttribute("info", "Добавление не удалось");
                     request.setAttribute("modelName", modelName);
                     request.setAttribute("modelSize", modelSize);
                     request.setAttribute("modelFirm", modelFirm);
