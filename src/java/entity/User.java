@@ -6,14 +6,11 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -25,6 +22,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String users;
     private String firstName;
     private String lastName;
     private String phone;
@@ -32,8 +30,6 @@ public class User implements Serializable {
     private String login;
     private String password;
     private String salt;
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ModelBox> listModelBox;
 
     public User() {
     }
@@ -53,57 +49,16 @@ public class User implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.firstName, other.firstName)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastName, other.lastName)) {
-            return false;
-        }
-        if (!Objects.equals(this.phone, other.phone)) {
-            return false;
-        }
-        if (!Objects.equals(this.money, other.money)) {
-            return false;
-        }
-        if (!Objects.equals(this.login, other.login)) {
-            return false;
-        }
-        if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
-        if (!Objects.equals(this.salt, other.salt)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-    
-    
-    @Override
     public String toString() {
-        return "User{" 
-                + "id=" + id 
-                + ", firstName=" + firstName
+        return "Клиент: " + "id=" + id 
+                + ", users=" + users 
+                + ", firstName=" + firstName 
                 + ", lastName=" + lastName 
                 + ", phone=" + phone 
-                + ", money=" + money
+                + ", money=" + money 
                 + ", login=" + login 
                 + ", password=" + password 
-                + ", salt=" + salt 
-                + '}';
+                + ", salt=" + salt;
     }
 
     public Long getId() {
@@ -162,10 +117,6 @@ public class User implements Serializable {
         this.salt = salt;
     }
 
-    public List<ModelBox> getListModelBox() {
-        return listModelBox;
-    }
-
     public double getMoney() {
         return money;
     }
@@ -173,8 +124,12 @@ public class User implements Serializable {
     public void setMoney(double money) {
         this.money = money;
     }
-    
-    public void setListModelBox(List<ModelBox> listModelBox) {
-        this.listModelBox = listModelBox;
-    } 
+
+    public String getUsers() {
+        return users;
+    }
+
+    public void setUsers(String users) {
+        this.users = users;
+    }
 }

@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,12 +21,12 @@ public class Model implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String description;
-    private String pathToFile;
+    private String models;
+    private String modelName;
+    private String modelSize;
+    private double price;
+    private String modelFirm;
 
-    public Model() {
-    }
-    
     public Long getId() {
         return id;
     }
@@ -36,59 +35,53 @@ public class Model implements Serializable{
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getModelName() {
+        return modelName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
-    public String getPathToFile() {
-        return pathToFile;
+    public String getModelSize() {
+        return modelSize;
     }
 
-    public void setPathToFile(String pathToFile) {
-        this.pathToFile = pathToFile;
+    public void setModelSize(String modelSize) {
+        this.modelSize = modelSize;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getModelFirm() {
+        return modelFirm;
+    }
+
+    public void setModelFirm(String modelFirm) {
+        this.modelFirm = modelFirm;
+    }
+
+    public String getModels() {
+        return models;
+    }
+
+    public void setModels(String models) {
+        this.models = models;
     }
 
     @Override
     public String toString() {
-        return "Model{" + "id=" + id + ", description=" + description + ", pathToFile=" + pathToFile + '}';
+        return "Модель: " + "id=" + id 
+                + ", models=" + models 
+                + ", modelName=" + modelName 
+                + ", modelSize=" + modelSize 
+                + ", price=" + price 
+                + ", modelFirm=" + modelFirm;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.description);
-        hash = 67 * hash + Objects.hashCode(this.pathToFile);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Model other = (Model) obj;
-        if (!Objects.equals(this.description, other.description)) {
-            return false;
-        }
-        if (!Objects.equals(this.pathToFile, other.pathToFile)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    
 }

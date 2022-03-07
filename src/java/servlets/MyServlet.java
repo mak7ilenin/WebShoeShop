@@ -5,10 +5,8 @@
  */
 package servlets;
 
-import entity.ModelBox;
 import entity.Model;
 import entity.User;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
@@ -18,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import session.ModelBoxFacade;
+import session.HistoryFacade;
 import session.ModelFacade;
 import session.UserFacade;
 
@@ -27,17 +25,22 @@ import session.UserFacade;
  * @author Melnikov
  */
 @WebServlet(name = "MyServlet",urlPatterns = {
-    "/addModelBox",
-    "/createModelBox",
+    "/showAddModel",
+    "/addModel",
+    "/addUser",
+    "/editModel",
+    "/showEditModel",
+    "/editUser",
+    
     "/listModels",
     "/showModel",
     "/removeModel",
         
 })
 public class MyServlet extends HttpServlet {
-    @EJB ModelBoxFacade modelBoxFacade;
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
+    @EJB HistoryFacade historyFacade;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,115 +58,139 @@ public class MyServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if(session == null){
             request.setAttribute("info", "Авторизуйтесь");
-            request.getRequestDispatcher("/showLogin").forward(request, response);
+            request.getRequestDispatcher("/showIndex").forward(request, response);
             return;
         }
         //Authentification
         User authUser = (User) session.getAttribute("authUser");
         if(authUser == null){
             request.setAttribute("info", "Авторизуйтесь");
-            request.getRequestDispatcher("/showLogin").forward(request, response);
+            request.getRequestDispatcher("/showIndex").forward(request, response);
             return;
         }
         String path = request.getServletPath();
+        List<Model> modelsList = modelFacade.findAll();
+        List<User> usersList = userFacade.findAll();
         switch (path) {
-            case "/addModelBox":
-                List<Model> models = modelFacade.findAll();
-                request.setAttribute("models", models);
-                request.getRequestDispatcher("/WEB-INF/addModelBox.jsp").forward(request, response);
+            case "/addModel":
+                request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);
                 break;
-            case "/createModelBox":
+            case "/showAddModel":
                 String modelName = request.getParameter("modelName");
                 String modelSize = request.getParameter("modelSize");
-                String model = request.getParameter("model");
-                String priceStr = request.getParameter("price");
-                    double price = 0;
-                    if (priceStr != null && priceStr.length() > 0) {
-                        price = Double.parseDouble(priceStr);
-                    }
                 String modelFirm = request.getParameter("modelFirm");
-                String url = request.getParameter("url");
-                if(modelName.isEmpty() || modelSize.isEmpty() || modelFirm.isEmpty() || url.isEmpty()){
-                    request.setAttribute("info", "Заполните все поля");
-                    request.setAttribute("modelName", modelName);
-                    request.setAttribute("modelSize", modelSize);
-                    request.setAttribute("price", price);
-                    request.setAttribute("modelFirm", modelFirm);
-                    request.setAttribute("url", url);
-                    request.getRequestDispatcher("/addModelBox").forward(request, response);
-                    break;
-                }
-                Model shoe = null;
-                try {
-                    shoe = modelFacade.find(Long.parseLong(model));
-                    ModelBox modelBox = new ModelBox();
-                    modelBox.setModelName(modelName);
-                    modelBox.setModelSize(modelSize);
-                    modelBox.setModel(shoe);
-                    modelBox.setPrice(price);
-                    modelBox.setModelFirm(modelFirm);
-                    modelBox.setUrl(url);
-                    modelBoxFacade.create(modelBox);
-                    authUser = userFacade.find(authUser.getId());
-                    authUser.getListModelBox().add(modelBox);
-                    userFacade.edit(authUser);
-                    session.setAttribute("authUser", authUser);
-                    request.setAttribute("info", "Данные записаны успешно");
-                    request.getRequestDispatcher("/addModelBox").forward(request, response);
-                } catch (Exception e) {
-                    request.setAttribute("info", "Добавление не удалось");
+                
+                if(modelName.isEmpty() || modelSize.isEmpty() || modelFirm.isEmpty()){
+                    request.setAttribute("info", "Заполните все поля!");
                     request.setAttribute("modelName", modelName);
                     request.setAttribute("modelSize", modelSize);
                     request.setAttribute("modelFirm", modelFirm);
-                    request.setAttribute("price", price);
-                    request.setAttribute("url", url);
-                    request.getRequestDispatcher("/addModelBox").forward(request, response);
+                    request.getRequestDispatcher("/addModel").forward(request, response);
+                    break;
+                }
+                try{
+                    Model addModel = new Model();
+                    addModel.setModelName(modelName);
+                    addModel.setModelSize(modelSize);
+                    addModel.setModelFirm(modelFirm);
+                    addModel.setPrice(Double.parseDouble(request.getParameter("price")));
+                    modelFacade.create(addModel);
+                    request.setAttribute("info", "Обувь добавлена!");
+                    request.getRequestDispatcher("/addModel").forward(request, response);
+                }
+                catch(Exception e){
+                    request.setAttribute("info", "Не удалось добавить модель!");
+                    request.setAttribute("modelName", modelName);
+                    request.setAttribute("modelSize", modelSize);
+                    request.setAttribute("modelFirm", modelFirm);
+                    request.setAttribute("money", null);
+                    request.getRequestDispatcher("/addModel").forward(request, response);
                     break;
                 }
                 break;
-            case "/listModels":
-                authUser=(User) session.getAttribute("authUser");
-                request.setAttribute("listModels", authUser.getListModelBox());
-                request.getRequestDispatcher("/WEB-INF/listModels.jsp").forward(request, response);
+            case "/addUser":
+                request.getRequestDispatcher("showSignUp").forward(request, response);
                 break;
-            case "/showModel":
-                String modelId = request.getParameter("modelId");
-                if(modelId != null && modelId.isEmpty()){
-                    request.setAttribute("info", "Неверный запрос");
-                    request.getRequestDispatcher("/listModels").forward(request, response);
-                    break;
-                }
+            case "/editModel":
+                request.setAttribute("models", modelsList);
+                request.getRequestDispatcher("/WEB-INF/editModel.jsp").forward(request, response);
+                break;
+            case "/showEditModel":
+                Model editModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
                 try {
-                    ModelBox ab = modelBoxFacade.find(Long.parseLong(modelId));
-                    request.setAttribute("modelBox", ab);
+                    String editModelName = request.getParameter("editModelName");
+                    String editModelSize = request.getParameter("editModelSize");
+                    String editModelFirm = request.getParameter("editModelFirm");
+                    editModel.setModelName(editModelName);
+                    editModel.setModelSize(editModelSize);
+                    editModel.setModelFirm(editModelFirm);
+                    editModel.setPrice(Double.parseDouble(request.getParameter("price")));
+                    request.setAttribute("info", "Модель успешно изменена!");
+                    modelFacade.edit(editModel);
+                    request.setAttribute("models", modelsList);
                 } catch (Exception e) {
-                    request.setAttribute("info", "Неверный запрос");
-                    request.getRequestDispatcher("/listModels").forward(request, response);
-                    break;
+                    request.setAttribute("info", "Изменение не удалось!");
                 }
-                request.getRequestDispatcher("/WEB-INF/showModel.jsp").forward(request, response);
+                request.getRequestDispatcher("/editModel").forward(request, response);
                 break;
-            case "/removeModel":
-                String id = request.getParameter("id");
-                try {
-                    for(ModelBox modelBox : authUser.getListModelBox()){
-                        if(modelBox.getId().equals(Long.parseLong(id))){
-                            authUser.getListModelBox().remove(modelBox);
-                            userFacade.edit(authUser);
-                            modelBoxFacade.remove(modelBox);
-                            session.setAttribute("authUser", authUser);
-                            File file = new File(modelBox.getModel().getPathToFile());
-                            file.delete();
-                            request.setAttribute("info", "Удален аккаунт: "+modelBox.getName());
-                            break;
-                        }
-                    }
-                    
-                } catch (Exception e) {
-                    request.setAttribute("info", "Удаление не удалось");
-                }
-                request.getRequestDispatcher("/listModels").forward(request, response);
+            case "/editUser":
+                request.setAttribute("users", usersList);
+                request.getRequestDispatcher("/WEB-INF/editUser.jsp").forward(request, response);
                 break;
+            case "/showEditUser":
+                request.getRequestDispatcher("/editUser").forward(request, response);
+                break;
+            case "/butModel":
+                request.getRequestDispatcher("/WEB-INF/buyModel.jsp").forward(request, response);
+                break;
+//            case "/addModelBox":
+//                List<Model> models = modelFacade.findAll();
+//                request.setAttribute("models", models);
+//                request.getRequestDispatcher("/WEB-INF/addModelBox.jsp").forward(request, response);
+//                break;  
+//            case "/listModels":
+//                authUser=(User) session.getAttribute("authUser");
+//                request.setAttribute("listModels", authUser.getListModelBox());
+//                request.getRequestDispatcher("/WEB-INF/listModels.jsp").forward(request, response);
+//                break;
+//            case "/showModel":
+//                String modelId = request.getParameter("modelId");
+//                if(modelId != null && modelId.isEmpty()){
+//                    request.setAttribute("info", "Неверный запрос");
+//                    request.getRequestDispatcher("/listModels").forward(request, response);
+//                    break;
+//                }
+//                try {
+//                    ModelBox ab = modelBoxFacade.find(Long.parseLong(modelId));
+//                    request.setAttribute("modelBox", ab);
+//                } catch (Exception e) {
+//                    request.setAttribute("info", "Неверный запрос");
+//                    request.getRequestDispatcher("/listModels").forward(request, response);
+//                    break;
+//                }
+//                request.getRequestDispatcher("/WEB-INF/showModel.jsp").forward(request, response);
+//                break;
+//            case "/removeModel":
+//                String id = request.getParameter("id");
+//                try {
+//                    for(ModelBox modelBox : authUser.getListModelBox()){
+//                        if(modelBox.getId().equals(Long.parseLong(id))){
+//                            authUser.getListModelBox().remove(modelBox);
+//                            userFacade.edit(authUser);
+//                            modelBoxFacade.remove(modelBox);
+//                            session.setAttribute("authUser", authUser);
+//                            File file = new File(modelBox.getModel().getPathToFile());
+//                            file.delete();
+//                            request.setAttribute("info", "Удален аккаунт: "+modelBox.getName());
+//                            break;
+//                        }
+//                    }
+//                    
+//                } catch (Exception e) {
+//                    request.setAttribute("info", "Удаление не удалось");
+//                }
+//                request.getRequestDispatcher("/listModels").forward(request, response);
+//                break;
             
         }
         

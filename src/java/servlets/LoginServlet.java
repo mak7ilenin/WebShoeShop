@@ -20,7 +20,7 @@ import tools.PasswordProtected;
 @WebServlet(name = "LoginServlet",loadOnStartup = 1, urlPatterns = {
     "/showIndex",
     "/index",
-//    "/logout",
+    "/logout",
     "/showSignUp",
     "/signUp",
 })
@@ -43,7 +43,6 @@ public class LoginServlet extends HttpServlet {
         user1.setSalt(salt1);
         String adminPassword = passwordProtected1.getProtectedPassword("12345", salt1);
         user1.setPassword(adminPassword);
-        user1.setListModelBox(new ArrayList<>());
         userFacade.create(user1);
         
         User user2 = new User();
@@ -57,7 +56,6 @@ public class LoginServlet extends HttpServlet {
         user2.setSalt(salt2);
         String secUserPassword = passwordProtected2.getProtectedPassword("123", salt2);
         user2.setPassword(secUserPassword);
-        user2.setListModelBox(new ArrayList<>());
         userFacade.create(user2);
     }
     /**
@@ -100,7 +98,7 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
                 request.setAttribute("info", "Привет, "+authUser.getFirstName());
-                request.getRequestDispatcher("/listModels").forward(request, response);
+                request.getRequestDispatcher("/showIndex").forward(request, response);
                 break;
             case "/logout":
                 session = request.getSession(false);
@@ -111,7 +109,7 @@ public class LoginServlet extends HttpServlet {
                 request.getRequestDispatcher("/listModels").forward(request, response);
                 break;
             case "/showSignUp":
-                request.getRequestDispatcher("/showSignUp.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/showSignUp.jsp").forward(request, response);
                 break;
             case "/signUp":
                 String firstName = request.getParameter("firstName");

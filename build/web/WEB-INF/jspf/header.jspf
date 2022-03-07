@@ -7,9 +7,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="css/bootstrap.min.css">
         
-        <title>Менеджер паролей</title>
+        <title>Интернет-магазин обуви</title>
     </head>
     <body>
         <c:import url="/WEB-INF/menu.jsp"></c:import>
-        <div class="container-fluid"  style="margin-top: 5px" >
+        <div class="container-fluid">
             <p class="my-3 w-100 d-flex justify-content-center text-info">${info}&nbsp;</p>
