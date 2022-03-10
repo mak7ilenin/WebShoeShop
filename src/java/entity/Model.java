@@ -21,7 +21,7 @@ public class Model implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String models;
+//    private String models;
     private String modelName;
     private String modelSize;
     private double price;
@@ -67,18 +67,18 @@ public class Model implements Serializable{
         this.modelFirm = modelFirm;
     }
 
-    public String getModels() {
-        return models;
-    }
-
-    public void setModels(String models) {
-        this.models = models;
-    }
+//    public String getModels() {
+//        return models;
+//    }
+//
+//    public void setModels(String models) {
+//        this.models = models;
+//    }
 
     @Override
     public String toString() {
         return "Модель: " + "id=" + id 
-                + ", models=" + models 
+//                + ", models=" + models 
                 + ", modelName=" + modelName 
                 + ", modelSize=" + modelSize 
                 + ", price=" + price 

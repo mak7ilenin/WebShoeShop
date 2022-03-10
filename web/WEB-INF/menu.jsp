@@ -17,15 +17,15 @@
     <div class="container-fluid">
         <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand" href="index">Магазин обуви</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="buyModel">Купить обувь</a>
+            <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
             
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="btn btn-secondary dropdown-toggle" style="margin-right: 3px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                   Добавить
                 </a>
 
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="addModel">Модель</a></li>
+                  <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
                   <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
                 </ul>
             </div>
@@ -35,8 +35,8 @@
                     Редактировать
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="editModel">Модель</a></li>
-                  <li><a class="dropdown-item" href="editUser">Пользователя</a></li>
+                  <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
+                  <li><a class="dropdown-item" href="showEditUser">Пользователя</a></li>
                 </ul>
             </div>
 
@@ -57,32 +57,3 @@
         </div>
     </div>
 </nav>
-
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="buyModel" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="editModel">Action</a>
-          <a class="dropdown-item" href="editUser">Another action</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>-->
