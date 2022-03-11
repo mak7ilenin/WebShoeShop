@@ -5,7 +5,6 @@ import entity.Model;
 import entity.User;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -179,75 +178,22 @@ public class MyServlet extends HttpServlet {
                 User buyUser = userFacade.find(Long.parseLong(request.getParameter("buyUsers")));
                     
                 if(buyUser.getMoney() >= buyModel.getPrice()) {
-                    try {
-                        History history = new History();
-                        history.setModel(buyModel);
-                        history.setUser(buyUser);
-                        history.getUser().setMoney(history.getUser().getMoney() - history.getModel().getPrice());
-                        history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                        historyFacade.create(history);   
-                        request.setAttribute("info", "Покупка успешно совершена!");
-                    } catch (Exception e) {
-                        request.setAttribute("info", "Не удалось совершить покупку!");
-                    }
+                    History history = new History();
+                    history.setModel(buyModel);
+                    history.setUser(buyUser);
+//                    history.getUser().setMoney(history.getUser().getMoney() - history.getModel().getPrice());
+                    buyUser.setMoney(buyUser.getMoney() - buyModel.getPrice());
+                    history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    userFacade.edit(buyUser);
+                    historyFacade.create(history);   
+                    request.setAttribute("info", "Покупка успешно совершена!");
                 }
                 else {
                     request.setAttribute("info", "Недостаточно средств!");
                 }
                 request.getRequestDispatcher("showBuyModel").forward(request, response);
                 break;
-//            case "/"
-//            case "/addModelBox":
-//                List<Model> models = modelFacade.findAll();
-//                request.setAttribute("models", models);
-//                request.getRequestDispatcher("/WEB-INF/addModelBox.jsp").forward(request, response);
-//                break;  
-//            case "/listModels":
-//                authUser=(User) session.getAttribute("authUser");
-//                request.setAttribute("listModels", authUser.getListModelBox());
-//                request.getRequestDispatcher("/WEB-INF/listModels.jsp").forward(request, response);
-//                break;
-//            case "/showModel":
-//                String modelId = request.getParameter("modelId");
-//                if(modelId != null && modelId.isEmpty()){
-//                    request.setAttribute("info", "Неверный запрос");
-//                    request.getRequestDispatcher("/listModels").forward(request, response);
-//                    break;
-//                }
-//                try {
-//                    ModelBox ab = modelBoxFacade.find(Long.parseLong(modelId));
-//                    request.setAttribute("modelBox", ab);
-//                } catch (Exception e) {
-//                    request.setAttribute("info", "Неверный запрос");
-//                    request.getRequestDispatcher("/listModels").forward(request, response);
-//                    break;
-//                }
-//                request.getRequestDispatcher("/WEB-INF/showModel.jsp").forward(request, response);
-//                break;
-//            case "/removeModel":
-//                String id = request.getParameter("id");
-//                try {
-//                    for(ModelBox modelBox : authUser.getListModelBox()){
-//                        if(modelBox.getId().equals(Long.parseLong(id))){
-//                            authUser.getListModelBox().remove(modelBox);
-//                            userFacade.edit(authUser);
-//                            modelBoxFacade.remove(modelBox);
-//                            session.setAttribute("authUser", authUser);
-//                            File file = new File(modelBox.getModel().getPathToFile());
-//                            file.delete();
-//                            request.setAttribute("info", "Удален аккаунт: "+modelBox.getName());
-//                            break;
-//                        }
-//                    }
-//                    
-//                } catch (Exception e) {
-//                    request.setAttribute("info", "Удаление не удалось");
-//                }
-//                request.getRequestDispatcher("/listModels").forward(request, response);
-//                break;
-            
-        }
-        
+        }        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -289,8 +235,6 @@ public class MyServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private Date localdateToDate(LocalDateTime atTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
 }
