@@ -184,6 +184,7 @@ public class MyServlet extends HttpServlet {
 //                    history.getUser().setMoney(history.getUser().getMoney() - history.getModel().getPrice());
                     buyUser.setMoney(buyUser.getMoney() - buyModel.getPrice());
                     history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    history.setGain(history.getGain() + buyModel.getPrice());
                     userFacade.edit(buyUser);
                     historyFacade.create(history);   
                     request.setAttribute("info", "Покупка успешно совершена!");

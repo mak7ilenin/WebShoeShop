@@ -22,6 +22,7 @@ public class History implements Serializable{
     private Model model;
     @Temporal(TemporalType.TIMESTAMP)
     private Date buy;
+    private double gain;
 
     public Long getId() {
         return id;
@@ -55,8 +56,17 @@ public class History implements Serializable{
         this.buy = buy;
     }
 
+    public double getGain() {
+        return gain;
+    }
+
+    public void setGain(double gain) {
+        this.gain = gain;
+    }
+    
     @Override
     public String toString() {
-        return "History{" + "id=" + id + ", user=" + user + ", model=" + model + ", buy=" + buy + '}';
+        return "History{" + "id=" + id + ", user=" + user + ", model=" + model + ", buy=" + buy + ", gain=" + gain +'}';
     }
+
 }
