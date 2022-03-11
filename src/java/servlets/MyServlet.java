@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import session.HistoryFacade;
 import session.ModelFacade;
 import session.UserFacade;
+import tools.PasswordProtected;
 
 /**
  *
@@ -36,13 +37,11 @@ import session.UserFacade;
     "/editUser",
     "/showEditUser",
     "/editUserLogin",
+    "/showEditUserLogin",
     
     "/showBuyModel",
     "/buyModel",
     
-    "/showModel",
-    "/removeModel",
-        
 })
 public class MyServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
@@ -167,6 +166,38 @@ public class MyServlet extends HttpServlet {
                     request.setAttribute("info", "Изменение не удалось!");
                 }
                 request.getRequestDispatcher("/showEditUser").forward(request, response);
+                break;
+            case "showEditUserLogin":
+                request.getRequestDispatcher("/WEB-INF/editUserLogin.jsp").forward(request, response);
+                break;
+            case "editUserLogin":
+                User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditUsers")));
+                String editUserLog = request.getParameter("editUserLog");
+                String editUserPassword1 = request.getParameter("editUserPassword1");
+                String editUserPassword2 = request.getParameter("editUserPassword2");
+                
+                if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля!");
+                    request.setAttribute("editUserLog", editUserLog);
+                    request.setAttribute("editUserPassword1", editUserPassword1);
+                    request.setAttribute("editUserPassword2", editUserPassword2);
+                }
+
+                if(editUserPassword1.equals(editUserPassword2)) {
+                    chooseEditUserSignIn.setLogin(editUserLog); 
+                    PasswordProtected passwordProtected = new PasswordProtected();
+                    String salt = passwordProtected.getSalt();
+                    chooseEditUserSignIn.setSalt(salt);
+                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editUserPassword1, salt);
+                    chooseEditUserSignIn.setPassword(protectedEditUserPassword);
+                    userFacade.edit(chooseEditUserSignIn);
+                    request.setAttribute("info", "Данные успешно изменены!");
+                    request.getRequestDispatcher("showEditUserLogin").forward(request, response);
+                }
+                else {
+                    request.setAttribute("info", "Пароли не совпадают");
+                }
+                request.getRequestDispatcher("showEditUserLogin").forward(request, response);
                 break;
             case "/showBuyModel":
                 request.setAttribute("users", usersList);
