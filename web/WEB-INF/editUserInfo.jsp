@@ -1,11 +1,15 @@
 <%-- 
-    Document   : editUser
+    Document   : editUserInfo
     Created on : Feb 10, 2022, 1:25:08 PM
     Author     : makso
 --%>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="w-100 d-flex justify-content-center">
-    <form action="editUser" method="POST" >
+    <form action="editUserInfo" method="POST" >
         <div class="card border-0 mb-3" style="width: 40em;">
             <h2 style="padding-bottom: 50px" class="my-4 w-100 d-flex justify-content-center">Изменение личных данных пользователя</h2>
             <label for="theUsers" style="text-align: center;" class="form-label mt-1">Зарегистрированные пользователи</label>
@@ -36,7 +40,7 @@
                 <small id="editUserMoney" hidden class="form-text text-muted">Error</small>
             </div>
             <input class="btn btn-primary mt-5" type="submit" value="Изменить">
-            <a class="btn btn-primary mt-2" href="showEditUserLogin">Изменить данные входа</a>
+            <a class="btn btn-secondary mt-2" href="showEditUserLogin">Изменить данные входа</a>
         </div>
     </form>
 </div>

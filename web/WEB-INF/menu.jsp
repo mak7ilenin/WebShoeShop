@@ -36,13 +36,12 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
-                  <li><a class="dropdown-item" href="showEditUser">Пользователя</a></li>
+                  <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
                 </ul>
             </div>
 
             </div>
             <ul class="navbar-nav  mb-2 mb-lg-0">
-                <li></li>
                 <c:if test="${authUser eq null}">
                     <li class="nav-item">
                       <a class="nav-link" href="showIndex">Войти</a>

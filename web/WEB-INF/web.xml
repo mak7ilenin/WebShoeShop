@@ -12,8 +12,8 @@
         <jsp-property-group>
             <display-name>template1</display-name>
             <url-pattern>/index.jsp</url-pattern>
-            <url-pattern>/WEB-INF/editUser.jsp</url-pattern>
             <url-pattern>/WEB-INF/editUserLogin.jsp</url-pattern>
+            <url-pattern>/WEB-INF/editUserInfo.jsp</url-pattern>
             <url-pattern>/WEB-INF/showSignUp.jsp</url-pattern>
             <url-pattern>/WEB-INF/editModel.jsp</url-pattern>
             <url-pattern>/WEB-INF/buyModel.jsp</url-pattern>

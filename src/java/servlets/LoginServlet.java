@@ -106,7 +106,7 @@ public class LoginServlet extends HttpServlet {
                     session.invalidate();
                     request.setAttribute("info", "Вы вышли");
                 }
-                request.getRequestDispatcher("/listModels").forward(request, response);
+                request.getRequestDispatcher("/showIndex").forward(request, response);
                 break;
             case "/showSignUp":
                 request.getRequestDispatcher("/WEB-INF/showSignUp.jsp").forward(request, response);
