@@ -16,8 +16,9 @@
                 <h2 style="padding-bottom: 50px" class="my-4 w-100 d-flex justify-content-center">Изменение данных входа пользователя</h2>
                 <label for="theEditLogin" style="text-align: center;" class="form-label mt-1">Зарегистрированные пользователи</label>
                 <select class="form-select"  id="theEditLogin" name="theEditLogin">
+                    <option style="text-align: center;" value="">--Выбрать--</option>
                     <c:forEach var="user" items="${users}">
-                        <option style="text-align: center" value="${user.id}">${user.firstName}</option>
+                        <option style="text-align: center" value="${user.id}">${user.firstName} ${user.lastName}</option>
                     </c:forEach>
                 </select>
                 <div class="form-group">

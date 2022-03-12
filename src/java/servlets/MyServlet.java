@@ -126,13 +126,16 @@ public class MyServlet extends HttpServlet {
                 String editUserPassword1 = request.getParameter("editUserPassword1");
                 String editUserPassword2 = request.getParameter("editUserPassword2");
                 User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditLogin")));                  
-
+      
                 if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
                     request.setAttribute("info", "Заполните все поля!");
                     request.setAttribute("editUserLog", editUserLog);
                     request.setAttribute("editUserPassword1", editUserPassword1);
                     request.setAttribute("editUserPassword2", editUserPassword2);
                     request.getRequestDispatcher("showEditUserLogin").forward(request, response);
+                }
+                else {
+                    request.setAttribute("info", "Выберите пользователя!");
                 }
 
                 if(editUserPassword1.equals(editUserPassword2)) {
@@ -156,6 +159,21 @@ public class MyServlet extends HttpServlet {
                 break;
             case "/showEditModel":
                 request.setAttribute("models", modelsList);
+//                Model activeEditModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
+//                if(activeEditModel != null) {
+//                    String activeModelName = activeEditModel.getModelName();
+//                    String activeModelSize = activeEditModel.getModelSize();
+//                    String activeModelFirm = activeEditModel.getModelFirm();
+//                    String activeModelPrice = Double.toString(activeEditModel.getPrice());
+//                    
+//                    request.setAttribute("editModelName", activeModelName);
+//                    request.setAttribute("editModelSize", activeModelSize);
+//                    request.setAttribute("editModelFirm", activeModelFirm);
+//                    request.setAttribute("editPrice", activeModelPrice);
+//                }
+//                else {
+//                    request.setAttribute("info", "Модели отсутсвуют!");
+//                }
                 request.getRequestDispatcher("/WEB-INF/editModel.jsp").forward(request, response);
                 break;
             case "/editModel":
@@ -164,6 +182,14 @@ public class MyServlet extends HttpServlet {
                 String editModelName = request.getParameter("editModelName");
                 String editModelSize = request.getParameter("editModelSize");
                 String editModelFirm = request.getParameter("editModelFirm");
+                
+                if(editModelName.isEmpty() || editModelSize.isEmpty() || editModelFirm.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля!");
+                    request.setAttribute("editModelName", editModelName);
+                    request.setAttribute("editModelSize", editModelSize);
+                    request.setAttribute("editModelFirm", editModelFirm);
+                }
+                
                 try {
                     editModel.setModelName(editModelName);
                     editModel.setModelSize(editModelSize);
@@ -177,39 +203,6 @@ public class MyServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/showEditModel").forward(request, response);
                 break;
-//            case "showEditLogin":
-//                request.getRequestDispatcher("/WEB-INF/editLogin.jsp").forward(request, response);
-//                break;
-//            case "editLogin":
-//                User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditUsers")));
-//                String editUserLog = request.getParameter("editUserLog");
-//                String editUserPassword1 = request.getParameter("editUserPassword1");
-//                String editUserPassword2 = request.getParameter("editUserPassword2");
-//                
-//                if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
-//                    request.setAttribute("info", "Заполните все поля!");
-//                    request.setAttribute("editUserLog", editUserLog);
-//                    request.setAttribute("editUserPassword1", editUserPassword1);
-//                    request.setAttribute("editUserPassword2", editUserPassword2);
-//                    request.getRequestDispatcher("showEditLogin").forward(request, response);
-//                }
-//
-//                if(editUserPassword1.equals(editUserPassword2)) {
-//                    chooseEditUserSignIn.setLogin(editUserLog); 
-//                    PasswordProtected passwordProtected = new PasswordProtected();
-//                    String salt = passwordProtected.getSalt();
-//                    chooseEditUserSignIn.setSalt(salt);
-//                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editUserPassword1, salt);
-//                    chooseEditUserSignIn.setPassword(protectedEditUserPassword);
-//                    userFacade.edit(chooseEditUserSignIn);
-//                    request.setAttribute("info", "Данные успешно изменены!");
-//                    request.getRequestDispatcher("showEditLogin").forward(request, response);
-//                }
-//                else {
-//                    request.setAttribute("info", "Пароли не совпадают");
-//                }
-//                request.getRequestDispatcher("showEditLogin").forward(request, response);
-//                break;
             case "/showEditUserInfo":
                 request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editUserInfo.jsp").forward(request, response);
@@ -220,6 +213,13 @@ public class MyServlet extends HttpServlet {
                 String editUserFirstName = request.getParameter("editUserFirstName");
                 String editUserLastName = request.getParameter("editUserLastName");
                 String editUserPhone = request.getParameter("editUserPhone");
+                
+                if(editUserFirstName.isEmpty() || editUserLastName.isEmpty() || editUserPhone.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля!");
+                    request.setAttribute("editUserFirstName", editUserFirstName);
+                    request.setAttribute("editUserLastName", editUserLastName);
+                    request.setAttribute("editUserPhone", editUserPhone);
+                }
                 
                 try {
                     editUser.setFirstName(editUserFirstName);
