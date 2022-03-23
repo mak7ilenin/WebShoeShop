@@ -32,10 +32,10 @@ public class HistoryFacade extends AbstractFacade<History> {
         super(History.class);
     }
     
-    public List<History> findHistoryWithModel(Model historyModelId) {
+    public List<History> findHistoryWithModel(Model deleteModel) {
         try {
-            return em.createQuery("SELECT * FROM History WHERE h.model = :model")
-                    .setParameter("model", historyModelId)
+            return em.createQuery("SELECT h FROM History WHERE h.model = :model")
+                    .setParameter("model", deleteModel)
                     .getResultList();
         } catch (Exception e) {
             return new ArrayList<>();

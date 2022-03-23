@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -200,13 +201,15 @@ public class MyServlet extends HttpServlet {
 
                 modelName = deleteModel.getModelName();
                 try {
+                    List<History> histories = historyFacade.findAll();
                     
-                    History historyModelId = (History) historyFacade.findHistoryWithModel(deleteModel);
-//                    modelFacade.edit(deleteModel);
-//                    historyFacade.edit(historyModelId);
-                    historyFacade.remove(historyModelId);
-//                    historiesList.get(delModel);
-                    modelFacade.remove(deleteModel);
+                    for (History history : histories) {
+                        if(Objects.equals(deleteModel.getId(), history.getModel().getId())) {
+                            historyFacade.remove(history);
+                            modelFacade.edit(deleteModel);
+                            modelFacade.remove(deleteModel);
+                        }
+                    }
                     request.setAttribute("info", "Обувь " + modelName + " успешно удалена!");
                 } catch (Exception e) {
                     request.setAttribute("info", "Не удалось удалить модель!");
