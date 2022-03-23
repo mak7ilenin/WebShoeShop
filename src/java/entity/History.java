@@ -16,9 +16,9 @@ public class History implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.DETACH)
     private User user;
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.DETACH)
     private Model model;
     @Temporal(TemporalType.TIMESTAMP)
     private Date buy;

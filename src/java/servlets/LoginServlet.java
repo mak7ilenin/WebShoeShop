@@ -97,7 +97,7 @@ public class LoginServlet extends HttpServlet {
                 }
                 HttpSession session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
-                request.setAttribute("info", "Привет, "+authUser.getFirstName());
+                request.setAttribute("info", "Приветствуем вас , "+authUser.getFirstName());
                 request.getRequestDispatcher("/showIndex").forward(request, response);
                 break;
             case "/logout":

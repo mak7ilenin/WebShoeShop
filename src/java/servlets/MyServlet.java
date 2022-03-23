@@ -196,11 +196,16 @@ public class MyServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/deleteModel.jsp").forward(request, response);
                 break;
             case "/deleteModel":
-                Model deleteModel = modelFacade.find(Long.parseLong(request.getParameter("available_Models")));
-                
+                Model deleteModel = modelFacade.find(Long.parseLong(request.getParameter("TheModels")));
+
                 modelName = deleteModel.getModelName();
                 try {
-                    modelFacade.edit(deleteModel);
+                    
+                    History historyModelId = (History) historyFacade.findHistoryWithModel(deleteModel);
+//                    modelFacade.edit(deleteModel);
+//                    historyFacade.edit(historyModelId);
+                    historyFacade.remove(historyModelId);
+//                    historiesList.get(delModel);
                     modelFacade.remove(deleteModel);
                     request.setAttribute("info", "Обувь " + modelName + " успешно удалена!");
                 } catch (Exception e) {
