@@ -39,6 +39,16 @@
                   <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
                 </ul>
             </div>
+            
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Удалить
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
+                  <!--<li><a class="dropdown-item" href="showDeleteClient">Пользователя</a></li>-->
+                </ul>
+            </div>
 
             </div>
             <ul class="navbar-nav  mb-2 mb-lg-0">

@@ -67,14 +67,6 @@ public class Model implements Serializable{
         this.modelFirm = modelFirm;
     }
 
-//    public String getModels() {
-//        return models;
-//    }
-//
-//    public void setModels(String models) {
-//        this.models = models;
-//    }
-
     @Override
     public String toString() {
         return "Модель: " + "id=" + id 
@@ -84,4 +76,5 @@ public class Model implements Serializable{
                 + ", price=" + price 
                 + ", modelFirm=" + modelFirm;
     }
+    
 }

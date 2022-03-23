@@ -34,6 +34,9 @@ import tools.PasswordProtected;
     "/editModel",
     "/showEditModel",
     
+    "/deleteModel",
+    "/showDeleteModel",
+    
     "/editUserInfo",
     "/showEditUserInfo",
     "/showEditUserLogin",
@@ -159,21 +162,6 @@ public class MyServlet extends HttpServlet {
                 break;
             case "/showEditModel":
                 request.setAttribute("models", modelsList);
-//                Model activeEditModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
-//                if(activeEditModel != null) {
-//                    String activeModelName = activeEditModel.getModelName();
-//                    String activeModelSize = activeEditModel.getModelSize();
-//                    String activeModelFirm = activeEditModel.getModelFirm();
-//                    String activeModelPrice = Double.toString(activeEditModel.getPrice());
-//                    
-//                    request.setAttribute("editModelName", activeModelName);
-//                    request.setAttribute("editModelSize", activeModelSize);
-//                    request.setAttribute("editModelFirm", activeModelFirm);
-//                    request.setAttribute("editPrice", activeModelPrice);
-//                }
-//                else {
-//                    request.setAttribute("info", "Модели отсутсвуют!");
-//                }
                 request.getRequestDispatcher("/WEB-INF/editModel.jsp").forward(request, response);
                 break;
             case "/editModel":
@@ -202,6 +190,23 @@ public class MyServlet extends HttpServlet {
                     request.setAttribute("info", "Изменение не удалось!");
                 }
                 request.getRequestDispatcher("/showEditModel").forward(request, response);
+                break;
+            case "/showDeleteModel":
+                request.setAttribute("models", modelsList);
+                request.getRequestDispatcher("/WEB-INF/deleteModel.jsp").forward(request, response);
+                break;
+            case "/deleteModel":
+                Model deleteModel = modelFacade.find(Long.parseLong(request.getParameter("available_Models")));
+                
+                modelName = deleteModel.getModelName();
+                try {
+                    modelFacade.edit(deleteModel);
+                    modelFacade.remove(deleteModel);
+                    request.setAttribute("info", "Обувь " + modelName + " успешно удалена!");
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не удалось удалить модель!");
+                }
+                request.getRequestDispatcher("/showDeleteModel").forward(request, response);
                 break;
             case "/showEditUserInfo":
                 request.setAttribute("users", usersList);

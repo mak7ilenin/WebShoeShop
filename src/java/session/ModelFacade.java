@@ -6,6 +6,7 @@
 package session;
 
 import entity.Model;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,13 @@ public class ModelFacade extends AbstractFacade<Model> {
     public ModelFacade() {
         super(Model.class);
     }
+    
+//    public List<Model> findModelInHistory() {
+//        try {
+//            return em.createQuery("SELECT ab FROM history WHERE ab.")
+//        } catch (Exception e) {
+//            
+//        }
+//    }
     
 }

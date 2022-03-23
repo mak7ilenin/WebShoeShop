@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password" class="form-label mt-4">Пароль</label>
-                    <input type="text" class="form-control" id="password" name="password" aria-describedby="" placeholder="" value="${password}">
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="" placeholder="" value="${password}">
                     <small id="password" hidden class="form-text text-muted">Error</small>
                 </div>
                 <input class="btn btn-primary mt-5" type="submit" value="Войти">
