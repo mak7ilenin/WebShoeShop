@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ModelFacade extends AbstractFacade<Model> {
 
-    @PersistenceContext(unitName = "WebPasswordManagerPU")
+    @PersistenceContext(unitName = "WebShoeShopPU")
     private EntityManager em;
 
     @Override
