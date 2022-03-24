@@ -25,7 +25,6 @@ import javax.servlet.http.HttpSession;
 import session.HistoryFacade;
 import session.ModelFacade;
 import session.UserFacade;
-import session.UserRoleFacade;
 
 /**
  *
@@ -44,7 +43,6 @@ public class BuyerServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
-    @EJB UserRoleFacade userRoleFacade;
     
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
@@ -78,13 +76,13 @@ public class BuyerServlet extends HttpServlet {
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
         
-        if(!userRoleFacade.isRole("BUYER", authUser)) {
-            request.setAttribute("info", "У вас недостаточно прав!");
-            request.getRequestDispatcher("/showIndex").forward(request, response);
-        }
+//        if(!userRoleFacade.isRole("BUYER", authUser)) {
+//            request.setAttribute("info", "У вас недостаточно прав!");
+//            request.getRequestDispatcher("/showIndex").forward(request, response);
+//        }
         String path = request.getServletPath();
 //        session.setAttribute("currentRole", session.getAttribute("currentRole"));
-        session.setAttribute("currentRole", userRoleFacade.getTheRole(authUser));
+//        session.setAttribute("currentRole", userRoleFacade.getTheRole(authUser));
         switch (path) {
             case "/showTheBuyModel":
                 request.getRequestDispatcher("/WEB-INF/buyModel.jsp").forward(request, response);

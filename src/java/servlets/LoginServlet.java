@@ -2,9 +2,9 @@ package servlets;
 
 import entity.Roles;
 import entity.User;
-import entity.UserRole;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.RolesFacade;
 import session.UserFacade;
-import session.UserRoleFacade;
 import tools.PasswordProtected;
 
 /**
@@ -31,31 +30,35 @@ import tools.PasswordProtected;
 public class LoginServlet extends HttpServlet {
     @EJB UserFacade userFacade;
     @EJB RolesFacade roleFacade;
-    @EJB UserRoleFacade userRoleFacade;
     
     @Override
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
-        if(userFacade.count()>0) return;    
-        User user = new User();
-        user.setFirstName("Maksim");
-        user.setLastName("Dzjubenko");
-        user.setPhone("53334005");
-        user.setMoney(122.2);
-        user.setLogin("admin");
-        PasswordProtected passwordProtected = new PasswordProtected();
-        String salt = passwordProtected.getSalt();
-        user.setSalt(salt);
-        String adminPassword = passwordProtected.getProtectedPassword("12345", salt);
-        user.setPassword(adminPassword);
-        userFacade.create(user);
+        
+        if(userFacade.count() < 1) {    
+            User user = new User();
+            user.setFirstName("Maksim");
+            user.setLastName("Dzjubenko");
+            user.setPhone("53334005");
+            user.setMoney(122.2);
+            user.setLogin("admin");
+            PasswordProtected passwordProtected = new PasswordProtected();
+            String salt = passwordProtected.getSalt();
+            user.setSalt(salt);
+            String adminPassword = passwordProtected.getProtectedPassword("12345", salt);
+            user.setPassword(adminPassword);
+            Roles role = new Roles();
+            role.setRoleName("ADMINISTRATOR");
+            user.setRoles(role);
+            userFacade.create(user);
+        }
+        
+        if(roleFacade.count() == 3) return;
         Roles role = new Roles();
         role.setRoleName("BUYER");
         roleFacade.create(role);
-        UserRole userRole = new UserRole();
-        userRole.setRoles(role);
-        userRole.setUser(user);
-        userRoleFacade.create(userRole);
+        role.setRoleName("MANAGER");
+        roleFacade.create(role);
     }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -161,6 +164,8 @@ public class LoginServlet extends HttpServlet {
                 newUser.setSalt(salt);
                 password1 = passwordProtected.getProtectedPassword(password1, salt);
                 newUser.setPassword(password1);
+                Roles roleName = roleFacade.findRoleByRoleName("BUYER");
+                newUser.setRoles(roleName);
                 userFacade.create(newUser);
                 request.setAttribute("info", "Приветсвуем вас, "+newUser.getFirstName()+"! Авторизуйтесь");
                 request.getRequestDispatcher("/showIndex").forward(request, response);

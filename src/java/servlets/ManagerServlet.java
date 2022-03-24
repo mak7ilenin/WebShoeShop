@@ -3,7 +3,6 @@ package servlets;
 import entity.History;
 import entity.Model;
 import entity.User;
-import entity.UserRole;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -22,7 +21,6 @@ import session.HistoryFacade;
 import session.ModelFacade;
 import session.RolesFacade;
 import session.UserFacade;
-import session.UserRoleFacade;
 import tools.PasswordProtected;
 
 /**
@@ -57,7 +55,6 @@ public class ManagerServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
-    @EJB UserRoleFacade userRoleFacade;
     
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
@@ -91,12 +88,12 @@ public class ManagerServlet extends HttpServlet {
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
         
-        if(!userRoleFacade.isRole("MANAGER", authUser)) {
-            request.setAttribute("info", "У вас недостаточно прав!");
-            request.getRequestDispatcher("/showIndex").forward(request, response);
-        }
+//        if(!userRoleFacade.isRole("MANAGER", authUser)) {
+//            request.setAttribute("info", "У вас недостаточно прав!");
+//            request.getRequestDispatcher("/showIndex").forward(request, response);
+//        }
         String path = request.getServletPath();
-        session.setAttribute("currentRole", session.getAttribute("currentRole"));
+//        session.setAttribute("currentRole", userRoleFacade.getTheRole(authUser));
         switch (path) {
             case "/showAddModel":
                 request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);
