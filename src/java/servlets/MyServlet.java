@@ -38,6 +38,9 @@ import tools.PasswordProtected;
     "/deleteModel",
     "/showDeleteModel",
     
+    "/deleteUser",
+    "/showDeleteUser",
+    
     "/editUserInfo",
     "/showEditUserInfo",
     "/showEditUserLogin",
@@ -198,16 +201,16 @@ public class MyServlet extends HttpServlet {
                 break;
             case "/deleteModel":
                 Model deleteModel = modelFacade.find(Long.parseLong(request.getParameter("TheModels")));
-
                 modelName = deleteModel.getModelName();
                 try {
                     List<History> histories = historyFacade.findAll();
                     
                     for (History history : histories) {
                         if(Objects.equals(deleteModel.getId(), history.getModel().getId())) {
-                            historyFacade.remove(history);
-                            modelFacade.edit(deleteModel);
-                            modelFacade.remove(deleteModel);
+                            for (History history1 : histories) {
+                                historyFacade.remove(history1);
+                            }
+                            modelFacade.remove(deleteModel);                              
                         }
                     }
                     request.setAttribute("info", "Обувь " + modelName + " успешно удалена!");
@@ -216,6 +219,31 @@ public class MyServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/showDeleteModel").forward(request, response);
                 break;
+//            case "/showDeleteUser":
+//                request.setAttribute("users", usersList);
+//                request.getRequestDispatcher("/WEB-INF/deleteUser.jsp").forward(request, response);
+//                break;
+//            case "/deleteUser":
+//                User deleteUser = userFacade.find(Long.parseLong(request.getParameter("TheUsers")));
+//                String userName = deleteUser.getFirstName();
+//                String userLastName = deleteUser.getLastName();
+//                
+//                try {
+//                    List<History> histories = historyFacade.findAll();
+//                    for (History history : histories) {
+//                        if (Objects.equals(deleteUser.getId(), history.getUser().getId())) {
+//                            for(History history1 : histories) {
+//                                historyFacade.remove(history1);
+//                            }
+//                            userFacade.remove(deleteUser);
+//                        }
+//                    }   
+//                } catch (Exception e) {
+//                    request.setAttribute("info", "Не удалось удалить пользователя!");
+//                }
+//                request.setAttribute("info", "Пользователь " + userName + " " + userLastName + " успешно удален!");
+//                request.getRequestDispatcher("showDeleteUser").forward(request, response);
+//                break;
             case "/showEditUserInfo":
                 request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editUserInfo.jsp").forward(request, response);
@@ -260,7 +288,6 @@ public class MyServlet extends HttpServlet {
                     History history = new History();
                     history.setModel(buyModel);
                     history.setUser(buyUser);
-//                    history.getUser().setMoney(history.getUser().getMoney() - history.getModel().getPrice());
                     buyUser.setMoney(buyUser.getMoney() - buyModel.getPrice());
                     history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                     history.setGain(history.getGain() + buyModel.getPrice());

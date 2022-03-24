@@ -1,6 +1,8 @@
 package servlets;
 
+import entity.Roles;
 import entity.User;
+import entity.UserRole;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.ejb.EJB;
@@ -31,32 +33,23 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init(); //To change body of generated methods, choose Tools | Templates.
-        if(userFacade.count()>1) return;    
-        User user1 = new User();
-        user1.setFirstName("Maksim");
-        user1.setLastName("Dzjubenko");
-        user1.setPhone("53334005");
-        user1.setMoney(122.2);
-        user1.setLogin("admin");
-        PasswordProtected passwordProtected1 = new PasswordProtected();
-        String salt1 = passwordProtected1.getSalt();
-        user1.setSalt(salt1);
-        String adminPassword = passwordProtected1.getProtectedPassword("12345", salt1);
-        user1.setPassword(adminPassword);
-        userFacade.create(user1);
+        if(userFacade.count()>0) return;    
+        User user = new User();
+        user.setFirstName("Maksim");
+        user.setLastName("Dzjubenko");
+        user.setPhone("53334005");
+        user.setMoney(122.2);
+        user.setLogin("admin");
+        PasswordProtected passwordProtected = new PasswordProtected();
+        String salt = passwordProtected.getSalt();
+        user.setSalt(salt);
+        String adminPassword = passwordProtected.getProtectedPassword("12345", salt);
+        user.setPassword(adminPassword);
+        Roles role = new Roles();
+        role.setRoleName("SYSADMIN");
+        UserRole userRole = new UserRole();
         
-        User user2 = new User();
-        user2.setFirstName("Daniel");
-        user2.setLastName("Monjane");
-        user2.setPhone("54429827");
-        user2.setMoney(185);
-        user2.setLogin("dan");
-        PasswordProtected passwordProtected2 = new PasswordProtected();
-        String salt2 = passwordProtected2.getSalt();
-        user2.setSalt(salt2);
-        String secUserPassword = passwordProtected2.getProtectedPassword("123", salt2);
-        user2.setPassword(secUserPassword);
-        userFacade.create(user2);
+        userFacade.create(user);
     }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

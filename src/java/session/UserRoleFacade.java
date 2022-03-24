@@ -5,10 +5,7 @@
  */
 package session;
 
-import entity.History;
-import entity.Model;
-import java.util.ArrayList;
-import java.util.List;
+import entity.UserRole;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author pupil
  */
 @Stateless
-public class HistoryFacade extends AbstractFacade<History> {
+public class UserRoleFacade extends AbstractFacade<UserRole> {
 
     @PersistenceContext(unitName = "WebShoeShopPU")
     private EntityManager em;
@@ -28,7 +25,7 @@ public class HistoryFacade extends AbstractFacade<History> {
         return em;
     }
 
-    public HistoryFacade() {
-        super(History.class);
+    public UserRoleFacade() {
+        super(UserRole.class);
     }
 }

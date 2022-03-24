@@ -47,7 +47,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
-                  <!--<li><a class="dropdown-item" href="showDeleteClient">Пользователя</a></li>-->
+                  <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
                 </ul>
             </div>
 

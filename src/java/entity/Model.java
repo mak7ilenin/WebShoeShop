@@ -21,7 +21,6 @@ public class Model implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private String models;
     private String modelName;
     private String modelSize;
     private double price;
