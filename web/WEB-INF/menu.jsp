@@ -18,38 +18,87 @@
     <div class="container-fluid">
         <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand" href="index">Магазин обуви</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
-            
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" style="margin-right: 3px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Добавить
-                </a>
+            <c:choose>
+                <c:when test="${currentRole eq 'ADMINISTRATOR'}">
+                    <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                          Добавить
+                        </a>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
-                  <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
-                </ul>
-            </div>
-            
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Редактировать
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
-                  <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
-                </ul>
-            </div>
-            
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Удалить
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
-                  <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
-                </ul>
-            </div>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Редактировать
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Удалить
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
+                        </ul>
+                    </div>
+                </c:when>
+                    
+                <c:when test="${currentRole eq 'MANAGER'}">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                          Добавить
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Редактировать
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Удалить
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
+                          <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
+                        </ul>
+                    </div>
+                </c:when>
+                    
+                <c:when test="${currentRole eq 'BUYER'}">
+                    <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Редактировать
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item <c:if test="${activeShowEditUserInfo eq true}">active</c:if>" href="showEditUserInfo">Личные данные</a></li>
+                            <li><a class="dropdown-item <c:if test="${activeShowEditUserInfo eq true}">active</c:if>" href="showEditUserInfo">Данные входа</a></li>
+                        </ul>
+                    </div>
+                </c:when>
+            </c:choose>
 
             </div>
             <ul class="navbar-nav  mb-2 mb-lg-0">

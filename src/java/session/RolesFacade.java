@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author pupil
  */
 @Stateless
-public class RoleFacade extends AbstractFacade<Roles> {
+public class RolesFacade extends AbstractFacade<Roles> {
 
     @PersistenceContext(unitName = "WebShoeShopPU")
     private EntityManager em;
@@ -25,7 +25,7 @@ public class RoleFacade extends AbstractFacade<Roles> {
         return em;
     }
 
-    public RoleFacade() {
+    public RolesFacade() {
         super(Roles.class);
     }
 }

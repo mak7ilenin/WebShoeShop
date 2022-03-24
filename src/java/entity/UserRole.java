@@ -25,11 +25,13 @@ public class UserRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne(cascade = CascadeType.MERGE)
     private User user;
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Roles roles;
     
+    public UserRole() {
+    }
 
     public Long getId() {
         return id;
@@ -45,6 +47,14 @@ public class UserRole implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
     }
     
     @Override
@@ -88,5 +98,6 @@ public class UserRole implements Serializable {
                 + ", role=" + roles.getRoleName()
                 + '}';
     }
+
    
 }

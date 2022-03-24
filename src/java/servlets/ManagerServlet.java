@@ -3,6 +3,7 @@ package servlets;
 import entity.History;
 import entity.Model;
 import entity.User;
+import entity.UserRole;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -19,14 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.HistoryFacade;
 import session.ModelFacade;
+import session.RolesFacade;
 import session.UserFacade;
+import session.UserRoleFacade;
 import tools.PasswordProtected;
 
 /**
  *
  * @author makso
  */
-@WebServlet(name = "MyServlet",urlPatterns = {
+@WebServlet(name = "ManagerServlet",urlPatterns = {
     "/showAddModel",
     "/addModel",
 
@@ -41,8 +44,8 @@ import tools.PasswordProtected;
     "/deleteUser",
     "/showDeleteUser",
     
-    "/editUserInfo",
     "/showEditUserInfo",
+    "/editUserInfo",
     "/showEditUserLogin",
     "/editUserLogin",
     
@@ -50,10 +53,11 @@ import tools.PasswordProtected;
     "/buyModel",
     
 })
-public class MyServlet extends HttpServlet {
+public class ManagerServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
+    @EJB UserRoleFacade userRoleFacade;
     
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
@@ -84,9 +88,15 @@ public class MyServlet extends HttpServlet {
             request.getRequestDispatcher("/showIndex").forward(request, response);
             return;
         }
-        String path = request.getServletPath();
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
+        
+        if(!userRoleFacade.isRole("MANAGER", authUser)) {
+            request.setAttribute("info", "У вас недостаточно прав!");
+            request.getRequestDispatcher("/showIndex").forward(request, response);
+        }
+        String path = request.getServletPath();
+        session.setAttribute("currentRole", session.getAttribute("currentRole"));
         switch (path) {
             case "/showAddModel":
                 request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);

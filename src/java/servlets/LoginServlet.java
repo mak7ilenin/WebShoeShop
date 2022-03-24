@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import session.RolesFacade;
 import session.UserFacade;
+import session.UserRoleFacade;
 import tools.PasswordProtected;
 
 /**
@@ -28,7 +30,8 @@ import tools.PasswordProtected;
 })
 public class LoginServlet extends HttpServlet {
     @EJB UserFacade userFacade;
-    
+    @EJB RolesFacade roleFacade;
+    @EJB UserRoleFacade userRoleFacade;
     
     @Override
     public void init() throws ServletException {
@@ -45,11 +48,14 @@ public class LoginServlet extends HttpServlet {
         user.setSalt(salt);
         String adminPassword = passwordProtected.getProtectedPassword("12345", salt);
         user.setPassword(adminPassword);
-        Roles role = new Roles();
-        role.setRoleName("SYSADMIN");
-        UserRole userRole = new UserRole();
-        
         userFacade.create(user);
+        Roles role = new Roles();
+        role.setRoleName("BUYER");
+        roleFacade.create(role);
+        UserRole userRole = new UserRole();
+        userRole.setRoles(role);
+        userRole.setUser(user);
+        userRoleFacade.create(userRole);
     }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -63,8 +69,8 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         request.setCharacterEncoding("UTF-8");
-         String path = request.getServletPath();
+        request.setCharacterEncoding("UTF-8");
+        String path = request.getServletPath();
         switch (path) {
             case "/showIndex":
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -72,8 +78,8 @@ public class LoginServlet extends HttpServlet {
             case "/index":
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
-                //Authentification
                 User authUser = userFacade.findByLogin(login);
+                //Authentification
                 if(authUser == null){
                     request.setAttribute("info", "Неверный логин или пароль");
                     request.getRequestDispatcher("/showIndex").forward(request, response);
@@ -88,6 +94,7 @@ public class LoginServlet extends HttpServlet {
                     request.getRequestDispatcher("/showIndex").forward(request, response);
                     break;
                 }
+
                 HttpSession session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
                 request.setAttribute("info", "Приветствуем вас , "+authUser.getFirstName());
