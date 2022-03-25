@@ -19,7 +19,47 @@
         <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand <c:if test="${activeShowEditUserInfo eq true}">active</c:if>" href="index">Магазин обуви</a>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <c:if test="${authUser.roles.roleName eq 'ADMINISTRATOR'}">
+            <c:if test="${authUser.role eq 'ADMINISTRATOR' or 'SECONDADMIN'}">
+                <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showAdminPanel">Панель админа</a>
+                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      Добавить
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
+                      <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        Редактировать
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
+                      <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        Удалить
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
+                      <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
+                    </ul>
+                </div>
+                <li class="nav-item">
+                    <c:catch var="user">
+                        <a class="nav-item">Ваш текущий баланс: ${user.money}</a>
+                    </c:catch>
+                </li>
+            </c:if>
+
+            <c:if test="${authUser.role eq 'MANAGER'}">
                 <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,42 +91,16 @@
                       <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
                     </ul>
                 </div>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <c:catch var="user">
+                            <p class="nav-item" style="margin-left: 880px; margin-top: 2px; color: white;">Ваш текущий баланс: ${authUser.money}$</p>
+                        </c:catch>
+                    </li>
+                </ul>
             </c:if>
 
-            <c:if test="${authUser.roles.roleName eq 'MANAGER'}">
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                      Добавить
-                    </a>
-
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
-                      <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Редактировать
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
-                      <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
-                    </ul>
-                </div>
-
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Удалить
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <li><a class="dropdown-item" href="showDeleteModel">Модель</a></li>
-                      <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
-                    </ul>
-                </div>
-            </c:if>
-
-            <c:if test="${authUser.roles.roleName eq 'BUYER'}">
+            <c:if test="${authUser.role eq 'BUYER'}">
                 <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -97,9 +111,17 @@
                         <li><a class="dropdown-item" href="showEditUserInfo">Данные входа</a></li>
                     </ul>
                 </div>
+                <li class="nav-item">
+                    <c:catch var="user">
+                        <a class="nav-link">Ваш текущий баланс: ${user.money}</a>
+                    </c:catch>
+                </li>
             </c:if>
-
-            </div>
+                
+            <c:if test="${authUser eq null}">
+                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showListModels">Список моделей</a>
+            </c:if>
+        </div>
         
             <ul class="navbar-nav  mb-2 mb-lg-0">
                 <c:if test="${authUser eq null}">

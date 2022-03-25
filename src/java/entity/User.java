@@ -34,32 +34,27 @@ public class User implements Serializable {
     private String login;
     private String password;
     private String salt;
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    private Roles roles;
+    private String role;
 
     public User() {
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", money=" + money + ", login=" + login + ", password=" + password + ", salt=" + salt + ", roles=" + roles + '}';
+        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", money=" + money + ", login=" + login + ", password=" + password + ", salt=" + salt + ", role=" + role + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + Objects.hashCode(this.firstName);
-        hash = 79 * hash + Objects.hashCode(this.lastName);
-        hash = 79 * hash + Objects.hashCode(this.phone);
-        hash = 79 * hash + (int) (Double.doubleToLongBits(this.money) ^ (Double.doubleToLongBits(this.money) >>> 32));
-        hash = 79 * hash + Objects.hashCode(this.login);
-        hash = 79 * hash + Objects.hashCode(this.password);
-        hash = 79 * hash + Objects.hashCode(this.salt);
-        hash = 79 * hash + Objects.hashCode(this.roles);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.phone);
+        hash = 71 * hash + Objects.hashCode(this.login);
+        hash = 71 * hash + Objects.hashCode(this.password);
+        hash = 71 * hash + Objects.hashCode(this.salt);
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -72,8 +67,21 @@ public class User implements Serializable {
             return false;
         }
         final User other = (User) obj;
+        if (!Objects.equals(this.phone, other.phone)) {
+            return false;
+        }
+        if (!Objects.equals(this.login, other.login)) {
+            return false;
+        }
+        if (!Objects.equals(this.salt, other.salt)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         return true;
     }
+
 
 
     public Long getId() {
@@ -140,11 +148,11 @@ public class User implements Serializable {
         this.money = money;
     }
 
-    public Roles getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Roles roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

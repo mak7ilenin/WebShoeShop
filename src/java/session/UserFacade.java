@@ -6,6 +6,7 @@
 package session;
 
 import entity.User;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,7 +39,11 @@ public class UserFacade extends AbstractFacade<User> {
             return null;
         }
     }
-
-   
     
+    public String findUserLogin(String login) {
+        List<String> loginsList = em.createQuery("SELECT u.l FROM User u")
+                .setParameter("login", login)
+                .getResultList();
+        return null;
+}
 }

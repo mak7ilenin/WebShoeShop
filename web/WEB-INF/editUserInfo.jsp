@@ -34,13 +34,7 @@
                 <input type="text" class="form-control" id="editUserPhone" name="editUserPhone" aria-describedby="" placeholder="" value="${phone}">
                 <small id="editUserPhone" hidden class="form-text text-muted">Error</small>
             </div>
-            <div class="form-group">
-                <label for="editUserMoney" class="form-label mt-4">Изменить количество денег</label>
-                <input type="text" class="form-control" id="editUserMoney" name="editUserMoney" aria-describedby="" placeholder="" value="${money}">
-                <small id="editUserMoney" hidden class="form-text text-muted">Error</small>
-            </div>
             <input class="btn btn-primary mt-5" type="submit" value="Изменить">
-            <a class="btn btn-secondary mt-2" href="showEditUserLogin">Изменить данные входа</a>
         </div>
     </form>
 </div>

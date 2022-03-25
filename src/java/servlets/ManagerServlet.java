@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import session.HistoryFacade;
 import session.ModelFacade;
-import session.RolesFacade;
 import session.UserFacade;
 import tools.PasswordProtected;
 
@@ -28,6 +27,11 @@ import tools.PasswordProtected;
  * @author makso
  */
 @WebServlet(name = "ManagerServlet",urlPatterns = {
+    "/showAdminPanel",
+    "/setRole",
+    
+    "/showListModels",
+        
     "/showAddModel",
     "/addModel",
 
@@ -80,21 +84,39 @@ public class ManagerServlet extends HttpServlet {
         }
         //Authentification
         User authUser = (User) session.getAttribute("authUser");
-        if(authUser == null){
-            request.setAttribute("info", "Авторизуйтесь");
-            request.getRequestDispatcher("/showIndex").forward(request, response);
-            return;
-        }
+//        if(authUser == null){
+//            request.setAttribute("info", "Авторизуйтесь");
+//            request.getRequestDispatcher("/showIndex").forward(request, response);
+//            return;
+//        }
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
         
-//        if(!userRoleFacade.isRole("MANAGER", authUser)) {
-//            request.setAttribute("info", "У вас недостаточно прав!");
-//            request.getRequestDispatcher("/showIndex").forward(request, response);
-//        }
         String path = request.getServletPath();
-//        session.setAttribute("currentRole", userRoleFacade.getTheRole(authUser));
         switch (path) {
+            case "/showListModels":
+                request.setAttribute("models", modelsList);
+                request.setAttribute("info", "Авторизуйтесь, чтобы купить модель");
+                request.getRequestDispatcher("/WEB-INF/listModels.jsp").forward(request, response);
+                break;
+            case "/showAdminPanel":
+                request.setAttribute("users", usersList);
+                request.getRequestDispatcher("/WEB-INF/adminPanel.jsp").forward(request, response);
+                break;
+            case "/setRole":
+                User chosenUser = userFacade.find(Long.parseLong(request.getParameter("сhooseUser")));
+                String chosenRole = request.getParameter("chooseRole");
+                try {
+                    chosenUser.setRole(chosenRole);
+                    userFacade.edit(chosenUser);         
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не удалось изменить роль!");
+                    request.getRequestDispatcher("/showAdminPanel").forward(request, response);
+                }
+
+                request.setAttribute("info", "Теперь " + chosenUser.getFirstName() + " имеет роль " + chosenRole);
+                request.getRequestDispatcher("/showAdminPanel").forward(request, response);
+                break;
             case "/showAddModel":
                 request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);
                 break;
