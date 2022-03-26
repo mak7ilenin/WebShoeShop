@@ -9,10 +9,7 @@
 <div class="w-100 d-flex justify-content-center">
     <form action="buyModel" method="POST" >
         <div class="card border-0 mb-3" style="width: 40em;">
-            <h2 style="padding-top: 70px" class="my-4 w-100 d-flex justify-content-center">Покупка обуви</h2>
-            <c:catch var="user">
-                <p>Ваш текущий баланс</p>
-            </c:catch>>
+            <h2 style="padding-top: 100px" class="my-4 w-100 d-flex justify-content-center">Покупка обуви</h2>
             <label for="buyModels" class="form-label mt-4">Доступные модели</label>
             <select class="form-select"  id="buyModels" name="buyModels">
                 <c:forEach var="model" items="${models}">

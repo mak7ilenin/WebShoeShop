@@ -26,7 +26,7 @@ import tools.PasswordProtected;
  *
  * @author makso
  */
-@WebServlet(name = "ManagerServlet",urlPatterns = {
+@WebServlet(name = "MainServlet",urlPatterns = {
     "/showAdminPanel",
     "/setRole",
     
@@ -48,14 +48,18 @@ import tools.PasswordProtected;
     
     "/showEditUserInfo",
     "/editUserInfo",
-    "/showEditUserLogin",
-    "/editUserLogin",
+    
+    "/showEditMyInfo",
+    "/editMyInfo",
+    "/showEditMyLogin",
+    "/editMyLogin",
+    
     
     "/showBuyModel",
     "/buyModel",
     
 })
-public class ManagerServlet extends HttpServlet {
+public class MainServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
@@ -82,16 +86,11 @@ public class ManagerServlet extends HttpServlet {
             request.getRequestDispatcher("/showIndex").forward(request, response);
             return;
         }
-        //Authentification
         User authUser = (User) session.getAttribute("authUser");
-//        if(authUser == null){
-//            request.setAttribute("info", "Авторизуйтесь");
-//            request.getRequestDispatcher("/showIndex").forward(request, response);
-//            return;
-//        }
+        
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
-        
+        usersList.remove(0);
         String path = request.getServletPath();
         switch (path) {
             case "/showListModels":
@@ -106,6 +105,7 @@ public class ManagerServlet extends HttpServlet {
             case "/setRole":
                 User chosenUser = userFacade.find(Long.parseLong(request.getParameter("сhooseUser")));
                 String chosenRole = request.getParameter("chooseRole");
+
                 try {
                     chosenUser.setRole(chosenRole);
                     userFacade.edit(chosenUser);         
@@ -116,6 +116,30 @@ public class ManagerServlet extends HttpServlet {
 
                 request.setAttribute("info", "Теперь " + chosenUser.getFirstName() + " имеет роль " + chosenRole);
                 request.getRequestDispatcher("/showAdminPanel").forward(request, response);
+                break;
+            case "/showBuyModel":
+                request.setAttribute("users", usersList);
+                request.setAttribute("models", modelsList);
+                request.getRequestDispatcher("/WEB-INF/buyModel.jsp").forward(request, response);
+                break;
+            case "/buyModel":
+                Model buyModel = modelFacade.find(Long.parseLong(request.getParameter("buyModels")));
+
+                if(authUser.getMoney() >= buyModel.getPrice()) {
+                    History history = new History();
+                    history.setModel(buyModel);
+                    history.setUser(authUser);
+                    authUser.setMoney(authUser.getMoney() - buyModel.getPrice());
+                    history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    history.setGain(history.getGain() + buyModel.getPrice());
+                    userFacade.edit(authUser);
+                    historyFacade.create(history);   
+                    request.setAttribute("info", "Покупка успешно совершена!");
+                }
+                else {
+                    request.setAttribute("info", "Недостаточно средств!");
+                }
+                request.getRequestDispatcher("showBuyModel").forward(request, response);
                 break;
             case "/showAddModel":
                 request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);
@@ -152,43 +176,6 @@ public class ManagerServlet extends HttpServlet {
                     request.getRequestDispatcher("/showAddModel").forward(request, response);
                     break;
                 }
-                break;
-            case "/showEditUserLogin":
-                request.setAttribute("users", usersList);
-                request.getRequestDispatcher("/WEB-INF/editUserLogin.jsp").forward(request, response);
-                break;
-            case "/editUserLogin":
-                String editUserLog = request.getParameter("editUserLog");
-                String editUserPassword1 = request.getParameter("editUserPassword1");
-                String editUserPassword2 = request.getParameter("editUserPassword2");
-                User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditLogin")));                  
-      
-                if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
-                    request.setAttribute("info", "Заполните все поля!");
-                    request.setAttribute("editUserLog", editUserLog);
-                    request.setAttribute("editUserPassword1", editUserPassword1);
-                    request.setAttribute("editUserPassword2", editUserPassword2);
-                    request.getRequestDispatcher("showEditUserLogin").forward(request, response);
-                }
-                else {
-                    request.setAttribute("info", "Выберите пользователя!");
-                }
-
-                if(editUserPassword1.equals(editUserPassword2)) {
-                    chooseEditUserSignIn.setLogin(editUserLog); 
-                    PasswordProtected passwordProtected = new PasswordProtected();
-                    String salt = passwordProtected.getSalt();
-                    chooseEditUserSignIn.setSalt(salt);
-                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editUserPassword1, salt);
-                    chooseEditUserSignIn.setPassword(protectedEditUserPassword);
-                    userFacade.edit(chooseEditUserSignIn);
-                    request.setAttribute("info", "Данные успешно изменены!");
-                    request.getRequestDispatcher("showEditUserLogin").forward(request, response);
-                }
-                else {
-                    request.setAttribute("info", "Пароли не совпадают");
-                }
-                request.getRequestDispatcher("showEditUserLogin").forward(request, response);
                 break;
             case "/addUser":
                 request.getRequestDispatcher("showSignUp").forward(request, response);
@@ -248,33 +235,33 @@ public class ManagerServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/showDeleteModel").forward(request, response);
                 break;
-//            case "/showDeleteUser":
-//                request.setAttribute("users", usersList);
-//                request.getRequestDispatcher("/WEB-INF/deleteUser.jsp").forward(request, response);
-//                break;
-//            case "/deleteUser":
-//                User deleteUser = userFacade.find(Long.parseLong(request.getParameter("TheUsers")));
-//                String userName = deleteUser.getFirstName();
-//                String userLastName = deleteUser.getLastName();
-//                
-//                try {
-//                    List<History> histories = historyFacade.findAll();
-//                    for (History history : histories) {
-//                        if (Objects.equals(deleteUser.getId(), history.getUser().getId())) {
-//                            for(History history1 : histories) {
-//                                historyFacade.remove(history1);
-//                            }
-//                            userFacade.remove(deleteUser);
-//                        }
-//                    }   
-//                } catch (Exception e) {
-//                    request.setAttribute("info", "Не удалось удалить пользователя!");
-//                }
-//                request.setAttribute("info", "Пользователь " + userName + " " + userLastName + " успешно удален!");
-//                request.getRequestDispatcher("showDeleteUser").forward(request, response);
-//                break;
-            case "/showEditUserInfo":
+            case "/showDeleteUser":
                 request.setAttribute("users", usersList);
+                request.getRequestDispatcher("/WEB-INF/deleteUser.jsp").forward(request, response);
+                break;
+            case "/deleteUser":
+                User deleteUser = userFacade.find(Long.parseLong(request.getParameter("TheUsers")));
+                String userName = deleteUser.getFirstName();
+                String userLastName = deleteUser.getLastName();
+                
+                try {
+                    List<History> histories = historyFacade.findAll();
+                    for (History history : histories) {
+                        if (Objects.equals(deleteUser.getId(), history.getUser().getId())) {
+                            for(History history1 : histories) {
+                                historyFacade.remove(history1);
+                            }
+                            userFacade.remove(deleteUser);
+                        }
+                    }   
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не удалось удалить пользователя!");
+                }
+                request.setAttribute("info", "Пользователь " + userName + " " + userLastName + " успешно удален!");
+                request.getRequestDispatcher("showDeleteUser").forward(request, response);
+                break;
+            case "/showEditUserInfo":
+                request.setAttribute("TheUsers", usersList);
                 request.getRequestDispatcher("/WEB-INF/editUserInfo.jsp").forward(request, response);
                 break;
             case "/editUserInfo":
@@ -304,31 +291,52 @@ public class ManagerServlet extends HttpServlet {
                 }
                 request.getRequestDispatcher("/showEditUserInfo").forward(request, response);
                 break;
-            case "/showBuyModel":
+            case "/showEditMyLogin":
                 request.setAttribute("users", usersList);
-                request.setAttribute("models", modelsList);
-                request.getRequestDispatcher("/WEB-INF/buyModel.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/editMyLogin.jsp").forward(request, response);
                 break;
-            case "/buyModel":
-                Model buyModel = modelFacade.find(Long.parseLong(request.getParameter("buyModels")));
-                User buyUser = userFacade.find(Long.parseLong(request.getParameter("buyUsers")));
-                    
-                if(buyUser.getMoney() >= buyModel.getPrice()) {
-                    History history = new History();
-                    history.setModel(buyModel);
-                    history.setUser(buyUser);
-                    buyUser.setMoney(buyUser.getMoney() - buyModel.getPrice());
-                    history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                    history.setGain(history.getGain() + buyModel.getPrice());
-                    userFacade.edit(buyUser);
-                    historyFacade.create(history);   
-                    request.setAttribute("info", "Покупка успешно совершена!");
+            case "/editMyLogin":
+                String editUserLog = request.getParameter("editUserLog");
+                String editUserPassword1 = request.getParameter("editUserPassword1");
+                String editUserPassword2 = request.getParameter("editUserPassword2");
+                User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditLogin")));                  
+      
+                if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля!");
+                    request.setAttribute("editUserLog", editUserLog);
+                    request.setAttribute("editUserPassword1", editUserPassword1);
+                    request.setAttribute("editUserPassword2", editUserPassword2);
+                    request.getRequestDispatcher("showEditMyLogin").forward(request, response);
                 }
                 else {
-                    request.setAttribute("info", "Недостаточно средств!");
+                    request.setAttribute("info", "Выберите пользователя!");
                 }
-                request.getRequestDispatcher("showBuyModel").forward(request, response);
+
+                if(editUserPassword1.equals(editUserPassword2)) {
+                    chooseEditUserSignIn.setLogin(editUserLog); 
+                    PasswordProtected passwordProtected = new PasswordProtected();
+                    String salt = passwordProtected.getSalt();
+                    chooseEditUserSignIn.setSalt(salt);
+                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editUserPassword1, salt);
+                    chooseEditUserSignIn.setPassword(protectedEditUserPassword);
+                    userFacade.edit(chooseEditUserSignIn);
+                    request.setAttribute("info", "Данные успешно изменены!");
+                    request.getRequestDispatcher("showEditUserLogin").forward(request, response);
+                }
+                else {
+                    request.setAttribute("info", "Пароли не совпадают");
+                }
+                request.getRequestDispatcher("showEditMyLogin").forward(request, response);
                 break;
+            case "/showEditMyInfo":
+                request.getRequestDispatcher("/WEB-INF/editMyInfo.jsp").forward(request, response);
+                break;
+            case "/editMyInfo":
+                authUser.setFirstName(request.getParameter("editFirstName"));
+                authUser.setLastName(request.getParameter("editLastName"));
+                authUser.setPhone(request.getParameter("editPhone"));
+                authUser.setMoney(Double.parseDouble(request.getParameter("editMoney")));
+                userFacade.create(authUser);  
         }        
     }
 

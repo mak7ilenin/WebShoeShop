@@ -16,7 +16,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand <c:if test="${activeShowEditUserInfo eq true}">active</c:if>" href="index">Магазин обуви</a>
+        <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand" href="index">Магазин обуви</a>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <c:if test="${authUser.role eq 'ADMINISTRATOR' or 'SECONDADMIN'}">
@@ -39,7 +39,9 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
-                      <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
+                      <li><a class="dropdown-item" href="showEditUserInfo">Другого пользователя</a></li>
+                      <li><a class="dropdown-item" href="showEditMyInfo">Личные данные</a></li>
+                      <li><a class="dropdown-item" href="showEditMyLogin">Данные входа</a></li>
                     </ul>
                 </div>
 
@@ -52,11 +54,13 @@
                       <li><a class="dropdown-item" href="showDeleteUser">Пользователя</a></li>
                     </ul>
                 </div>
-                <li class="nav-item">
-                    <c:catch var="user">
-                        <a class="nav-item">Ваш текущий баланс: ${user.money}</a>
-                    </c:catch>
-                </li>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <c:catch var="user">
+                            <p class="nav-item" style="margin-left: 720px; margin-top: 2px; color: white;">Ваш текущий баланс: ${authUser.money}$</p>
+                        </c:catch>
+                    </li>
+                </ul>
             </c:if>
 
             <c:if test="${authUser.role eq 'MANAGER'}">
@@ -65,7 +69,6 @@
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       Добавить
                     </a>
-
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
                       <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
@@ -78,7 +81,9 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
-                      <li><a class="dropdown-item" href="showEditUserInfo">Пользователя</a></li>
+                      <li><a class="dropdown-item" href="showEditUserInfo">Другого пользователя</a></li>
+                      <li><a class="dropdown-item" href="showEditUserInfo">Личные данные</a></li>
+                      <li><a class="dropdown-item" href="showEditUserInfo">Данные входа</a></li>
                     </ul>
                 </div>
 
@@ -104,18 +109,20 @@
                 <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Редактировать
+                        Настройки аккаунта
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="showEditUserInfo">Личные данные</a></li>
-                        <li><a class="dropdown-item" href="showEditUserInfo">Данные входа</a></li>
+                        <li><a class="dropdown-item" href="showEditMyInfo">Личные данные</a></li>
+                        <li><a class="dropdown-item" href="showEditMyLogin">Данные входа</a></li>
                     </ul>
                 </div>
-                <li class="nav-item">
-                    <c:catch var="user">
-                        <a class="nav-link">Ваш текущий баланс: ${user.money}</a>
-                    </c:catch>
-                </li>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <c:catch var="user">
+                            <p class="nav-item" style="margin-left: 1060px; margin-top: 2px; color: white;">Ваш текущий баланс: ${authUser.money}$</p>
+                        </c:catch>
+                    </li>
+                </ul>
             </c:if>
                 
             <c:if test="${authUser eq null}">

@@ -34,7 +34,6 @@
                 <small id="editMoney" hidden class="form-text text-muted">Error</small>
             </div>
             <input class="btn btn-primary mt-5" type="submit" value="Изменить">
-            <a class="btn btn-secondary mt-2" href="showEditUserLogin">Изменить данные входа</a>
         </div>
     </form>
 </div>

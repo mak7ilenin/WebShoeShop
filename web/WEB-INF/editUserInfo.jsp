@@ -15,7 +15,7 @@
             <label for="theUsers" style="text-align: center;" class="form-label mt-1">Зарегистрированные пользователи</label>
             <select class="form-select"  id="theUsers" name="theUsers">
                 <c:forEach var="user" items="${users}">
-                    <option style="text-align: center" value="${user.id}">${user.firstName}</option>
+                    <option style="text-align: center" value="${user.id}">${user.firstName} ${user.lastName}</option>
                 </c:forEach>
             </select>
 
