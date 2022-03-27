@@ -30,6 +30,9 @@ import tools.PasswordProtected;
     "/showAdminPanel",
     "/setRole",
     
+    "/showGain",
+    "/gain",
+    
     "/showListModels",
         
     "/showAddModel",
@@ -38,6 +41,7 @@ import tools.PasswordProtected;
     "/addUser",
     
     "/editModel",
+    "/chooseModelToEdit",
     "/showEditModel",
     
     "/deleteModel",
@@ -90,7 +94,10 @@ public class MainServlet extends HttpServlet {
         
         List<Model> modelsList = modelFacade.findAll();
         List<User> usersList = userFacade.findAll();
+//        Long myselfInList = authUser.getId();
+//        int intID = myselfInList.intValue();
         usersList.remove(0);
+//        usersList.remove(intID);
         String path = request.getServletPath();
         switch (path) {
             case "/showListModels":
@@ -117,6 +124,11 @@ public class MainServlet extends HttpServlet {
                 request.setAttribute("info", "Теперь " + chosenUser.getFirstName() + " имеет роль " + chosenRole);
                 request.getRequestDispatcher("/showAdminPanel").forward(request, response);
                 break;
+            case "/showGain":
+                request.getRequestDispatcher("/WEB-INF/gain.jsp").forward(request, response);
+                break;
+            case "/gain":
+                
             case "/showBuyModel":
                 request.setAttribute("users", usersList);
                 request.setAttribute("models", modelsList);
@@ -142,12 +154,13 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("showBuyModel").forward(request, response);
                 break;
             case "/showAddModel":
+                request.setAttribute("amount", 1);
                 request.getRequestDispatcher("/WEB-INF/addModel.jsp").forward(request, response);
                 break;
             case "/addModel":
                 String modelName = request.getParameter("modelName");
                 String modelSize = request.getParameter("modelSize");
-                String modelFirm = request.getParameter("modelFirm");
+                String modelFirm = request.getParameter("modelFirm");   
                 
                 if(modelName.isEmpty() || modelSize.isEmpty() || modelFirm.isEmpty()){
                     request.setAttribute("info", "Заполните все поля!");
@@ -163,6 +176,7 @@ public class MainServlet extends HttpServlet {
                     addModel.setModelSize(modelSize);
                     addModel.setModelFirm(modelFirm);
                     addModel.setPrice(Double.parseDouble(request.getParameter("price")));
+                    addModel.setAmount(Integer.parseInt(request.getParameter("amount")));
                     modelFacade.create(addModel);
                     request.setAttribute("info", "Обувь добавлена!");
                     request.getRequestDispatcher("/showAddModel").forward(request, response);
@@ -180,13 +194,16 @@ public class MainServlet extends HttpServlet {
             case "/addUser":
                 request.getRequestDispatcher("showSignUp").forward(request, response);
                 break;
-            case "/showEditModel":
+            case "/showEditModel":    
                 request.setAttribute("models", modelsList);
                 request.getRequestDispatcher("/WEB-INF/editModel.jsp").forward(request, response);
                 break;
-            case "/editModel":
+//            case "/chooseModelToEdit":
+//                String editModelName = editModel.getModelName();
+//                request.setAttribute("editModelName", editModelName);
+//                request.getRequestDispatcher("/showEditModel").forward(request, response);
+            case "/editModel":      
                 Model editModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
-                
                 String editModelName = request.getParameter("editModelName");
                 String editModelSize = request.getParameter("editModelSize");
                 String editModelFirm = request.getParameter("editModelFirm");
@@ -261,7 +278,7 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("showDeleteUser").forward(request, response);
                 break;
             case "/showEditUserInfo":
-                request.setAttribute("TheUsers", usersList);
+                request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editUserInfo.jsp").forward(request, response);
                 break;
             case "/editUserInfo":
@@ -292,51 +309,66 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("/showEditUserInfo").forward(request, response);
                 break;
             case "/showEditMyLogin":
-                request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editMyLogin.jsp").forward(request, response);
                 break;
             case "/editMyLogin":
-                String editUserLog = request.getParameter("editUserLog");
-                String editUserPassword1 = request.getParameter("editUserPassword1");
-                String editUserPassword2 = request.getParameter("editUserPassword2");
-                User chooseEditUserSignIn = userFacade.find(Long.parseLong(request.getParameter("theEditLogin")));                  
+                String editLogin = request.getParameter("editLogin");
+                String editPassword1 = request.getParameter("editPassword1");
+                String editPassword2 = request.getParameter("editPassword2");             
       
-                if(editUserLog.isEmpty() || editUserPassword1.isEmpty() || editUserPassword2.isEmpty()) {
+                if(editLogin.isEmpty() || editPassword1.isEmpty() || editPassword2.isEmpty()) {
                     request.setAttribute("info", "Заполните все поля!");
-                    request.setAttribute("editUserLog", editUserLog);
-                    request.setAttribute("editUserPassword1", editUserPassword1);
-                    request.setAttribute("editUserPassword2", editUserPassword2);
-                    request.getRequestDispatcher("showEditMyLogin").forward(request, response);
+                    request.setAttribute("editLogin", editLogin);
+                    request.setAttribute("editPassword1", editPassword1);
+                    request.setAttribute("editPassword2", editPassword2);
+                    request.getRequestDispatcher("/showEditMyLogin").forward(request, response);
                 }
                 else {
                     request.setAttribute("info", "Выберите пользователя!");
                 }
 
-                if(editUserPassword1.equals(editUserPassword2)) {
-                    chooseEditUserSignIn.setLogin(editUserLog); 
+                if(editPassword1.equals(editPassword2)) {
+                    authUser.setLogin(editLogin); 
                     PasswordProtected passwordProtected = new PasswordProtected();
                     String salt = passwordProtected.getSalt();
-                    chooseEditUserSignIn.setSalt(salt);
-                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editUserPassword1, salt);
-                    chooseEditUserSignIn.setPassword(protectedEditUserPassword);
-                    userFacade.edit(chooseEditUserSignIn);
+                    authUser.setSalt(salt);
+                    String protectedEditUserPassword = passwordProtected.getProtectedPassword(editPassword1, salt);
+                    authUser.setPassword(protectedEditUserPassword);
+                    userFacade.edit(authUser);
                     request.setAttribute("info", "Данные успешно изменены!");
-                    request.getRequestDispatcher("showEditUserLogin").forward(request, response);
+                    request.getRequestDispatcher("/showEditMyLogin").forward(request, response);
                 }
                 else {
                     request.setAttribute("info", "Пароли не совпадают");
                 }
-                request.getRequestDispatcher("showEditMyLogin").forward(request, response);
+                request.getRequestDispatcher("/showEditMyLogin").forward(request, response);
                 break;
             case "/showEditMyInfo":
+                request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editMyInfo.jsp").forward(request, response);
                 break;
             case "/editMyInfo":
-                authUser.setFirstName(request.getParameter("editFirstName"));
-                authUser.setLastName(request.getParameter("editLastName"));
-                authUser.setPhone(request.getParameter("editPhone"));
-                authUser.setMoney(Double.parseDouble(request.getParameter("editMoney")));
-                userFacade.create(authUser);  
+                if (request.getParameter("editFirstName").isEmpty() || 
+                        request.getParameter("editLastName").isEmpty() || 
+                        request.getParameter("editPhone").isEmpty() ||
+                        request.getParameter("editMoney").isEmpty()){
+                    request.setAttribute("info", "Заполните все поля!");
+                    request.getRequestDispatcher("showEditMyInfo.jsp").forward(request, response);
+                    break;
+                }
+                try {
+                    authUser.setFirstName(request.getParameter("editFirstName"));
+                    authUser.setLastName(request.getParameter("editLastName"));
+                    authUser.setPhone(request.getParameter("editPhone"));
+                    authUser.setMoney(Double.parseDouble(request.getParameter("editMoney")));
+                    userFacade.edit(authUser);
+                    request.setAttribute("info", "Данные успешно сохранены!");
+                    break;
+                } catch (Exception e) {
+                    request.setAttribute("info", "Не удалось изменить данные!");
+                }
+                request.getRequestDispatcher("/showEditMyInfo").forward(request, response);
+                break;
         }        
     }
 

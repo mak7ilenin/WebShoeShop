@@ -16,12 +16,17 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a style="font-size: 26px; font-weight: 700; margin-bottom: 4px;" class="navbar-brand" href="index">Магазин обуви</a>
+        <a style="font-size: 26px; font-weight: 700; margin-bottom: 5px;" class="navbar-brand" href="index">Магазин обуви</a>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <c:if test="${authUser.role eq 'ADMINISTRATOR' or 'SECONDADMIN'}">
-                <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showAdminPanel">Панель админа</a>
-                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
+                <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 2px" class="navbar-brand" href="^">Панель админа</a>
+                <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Панель админа</a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="showAdminPanel">Управление ролями</a></li>
+                    <li><a class="dropdown-item" href="showGain">Пользователя</a></li>
+                </ul>
+                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 2px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       Добавить
@@ -126,7 +131,7 @@
             </c:if>
                 
             <c:if test="${authUser eq null}">
-                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 3px" class="navbar-brand" href="showListModels">Список моделей</a>
+                <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 0px" class="navbar-brand" href="showListModels">Список моделей</a>
             </c:if>
         </div>
         
