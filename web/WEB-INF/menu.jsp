@@ -20,12 +20,16 @@
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <c:if test="${authUser.role eq 'ADMINISTRATOR' or 'SECONDADMIN'}">
-                <a style="font-size: 22px; color: white; font-weight: 400; margin-bottom: 2px" class="navbar-brand" href="^">Панель админа</a>
-                <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Панель админа</a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="showAdminPanel">Управление ролями</a></li>
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" style="font-size: 22px; margin-right: 10px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      Панель админа
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <li><a class="dropdown-item" href="showAdminPanel">Управление ролями</a></li>
                     <li><a class="dropdown-item" href="showGain">Пользователя</a></li>
-                </ul>
+                    </ul>
+                </div>
                 <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 2px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="margin-right: 4px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +55,7 @@
                 </div>
 
                 <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" style="margin-right: 4px" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         Удалить
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -62,7 +66,7 @@
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
                         <c:catch var="user">
-                            <p class="nav-item" style="margin-left: 720px; margin-top: 2px; color: white;">Ваш текущий баланс: ${authUser.money}$</p>
+                            <p class="nav-item" style="margin-left: 680px; margin-top: 2px; color: white;">Ваш текущий баланс: ${authUser.money}$</p>
                         </c:catch>
                     </li>
                 </ul>
