@@ -31,7 +31,8 @@ import tools.PasswordProtected;
     "/setRole",
     
     "/showGain",
-    "/gain",
+    "/allGain",
+    "/gainForAMonth",
     
     "/showListModels",
         
@@ -125,10 +126,19 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("/showAdminPanel").forward(request, response);
                 break;
             case "/showGain":
+                List<History> histories = historyFacade.findAll();
+                Double sumGain = 0.0;
+                for (History history : histories) {
+                    sumGain = sumGain + history.getGain();
+                    System.out.println(sumGain);
+                }
+                request.setAttribute("allGain", "Заработок за всё время работы магазаниа: " + sumGain + "$");
                 request.getRequestDispatcher("/WEB-INF/gain.jsp").forward(request, response);
                 break;
             case "/gain":
-                
+                request.getParameter("")
+                request.getRequestDispatcher("/showGain").forward(request, response);
+                break;
             case "/showBuyModel":
                 request.setAttribute("users", usersList);
                 request.setAttribute("models", modelsList);
@@ -137,19 +147,24 @@ public class MainServlet extends HttpServlet {
             case "/buyModel":
                 Model buyModel = modelFacade.find(Long.parseLong(request.getParameter("buyModels")));
 
-                if(authUser.getMoney() >= buyModel.getPrice()) {
+                if(authUser.getMoney() >= buyModel.getPrice() && buyModel.getAmount() > 0) {
                     History history = new History();
                     history.setModel(buyModel);
                     history.setUser(authUser);
                     authUser.setMoney(authUser.getMoney() - buyModel.getPrice());
                     history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                     history.setGain(history.getGain() + buyModel.getPrice());
+                    buyModel.setAmount(buyModel.getAmount() - 1);
+                    modelFacade.edit(buyModel);
                     userFacade.edit(authUser);
                     historyFacade.create(history);   
                     request.setAttribute("info", "Покупка успешно совершена!");
                 }
-                else {
+                else if (authUser.getMoney() < buyModel.getPrice()) {
                     request.setAttribute("info", "Недостаточно средств!");
+                }
+                else if (buyModel.getAmount() == 0){
+                    request.setAttribute("info", "Данной модели нет на складе!");
                 }
                 request.getRequestDispatcher("showBuyModel").forward(request, response);
                 break;
@@ -236,11 +251,11 @@ public class MainServlet extends HttpServlet {
                 Model deleteModel = modelFacade.find(Long.parseLong(request.getParameter("TheModels")));
                 modelName = deleteModel.getModelName();
                 try {
-                    List<History> histories = historyFacade.findAll();
+                    List<History> histories1 = historyFacade.findAll();
                     
-                    for (History history : histories) {
+                    for (History history : histories1) {
                         if(Objects.equals(deleteModel.getId(), history.getModel().getId())) {
-                            for (History history1 : histories) {
+                            for (History history1 : histories1) {
                                 historyFacade.remove(history1);
                             }
                             modelFacade.remove(deleteModel);                              
@@ -262,10 +277,10 @@ public class MainServlet extends HttpServlet {
                 String userLastName = deleteUser.getLastName();
                 
                 try {
-                    List<History> histories = historyFacade.findAll();
-                    for (History history : histories) {
+                    List<History> histories1 = historyFacade.findAll();
+                    for (History history : histories1) {
                         if (Objects.equals(deleteUser.getId(), history.getUser().getId())) {
-                            for(History history1 : histories) {
+                            for(History history1 : histories1) {
                                 historyFacade.remove(history1);
                             }
                             userFacade.remove(deleteUser);

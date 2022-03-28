@@ -31,4 +31,5 @@ public class HistoryFacade extends AbstractFacade<History> {
     public HistoryFacade() {
         super(History.class);
     }
+    
 }

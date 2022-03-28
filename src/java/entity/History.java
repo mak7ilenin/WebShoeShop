@@ -90,8 +90,7 @@ public class History implements Serializable{
         final History other = (History) obj;
         return true;
     }
-    
-    
+
     
     @Override
     public String toString() {

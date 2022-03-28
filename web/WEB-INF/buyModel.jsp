@@ -13,7 +13,7 @@
             <label for="buyModels" class="form-label mt-4">Доступные модели</label>
             <select class="form-select"  id="buyModels" name="buyModels">
                 <c:forEach var="model" items="${models}">
-                    <option style="text-align: center" value="${model.id}">Model: ${model.modelName} // Size: ${model.modelSize} // Brand: ${model.modelFirm} // Price: ${model.price}</option>
+                    <option style="text-align: center" value="${model.id}">Model: ${model.modelName} // Size: ${model.modelSize} // Brand: ${model.modelFirm} // Price: ${model.price} // Amount: ${model.amount}</option>
                 </c:forEach>
             </select>
             <input class="btn btn-primary mt-5" type="submit" value="Купить">

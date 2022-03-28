@@ -27,7 +27,7 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showAdminPanel">Управление ролями</a></li>
-                    <li><a class="dropdown-item" href="showGain">Пользователя</a></li>
+                    <li><a class="dropdown-item" href="showGain">Прибыль магазина</a></li>
                     </ul>
                 </div>
                 <a style="font-size: 20px; color: white; font-weight: 400; margin-bottom: 2px" class="navbar-brand" href="showBuyModel">Купить обувь</a>
@@ -91,8 +91,8 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showEditModel">Модель</a></li>
                       <li><a class="dropdown-item" href="showEditUserInfo">Другого пользователя</a></li>
-                      <li><a class="dropdown-item" href="showEditUserInfo">Личные данные</a></li>
-                      <li><a class="dropdown-item" href="showEditUserInfo">Данные входа</a></li>
+                      <li><a class="dropdown-item" href="showEditMyInfo">Личные данные</a></li>
+                      <li><a class="dropdown-item" href="showEditMyLogin">Данные входа</a></li>
                     </ul>
                 </div>
 
