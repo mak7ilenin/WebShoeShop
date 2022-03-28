@@ -19,7 +19,7 @@
         <a style="font-size: 26px; font-weight: 700; margin-bottom: 5px;" class="navbar-brand" href="index">Магазин обуви</a>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <c:if test="${authUser.role eq 'ADMINISTRATOR' or 'SECONDADMIN'}">
+            <c:if test="${authUser.role eq 'ADMINISTRATOR' or authUser.role eq 'SECONDADMIN'}">
                 <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" style="font-size: 22px; margin-right: 10px" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       Панель админа
@@ -39,6 +39,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <li><a class="dropdown-item" href="showAddModel">Модель</a></li>
                       <li><a class="dropdown-item" href="addUser">Пользователя</a></li>
+                      <li><a class="dropdown-item" href="showOrderModelAmount">Количество имеющихся моделей</a></li>
                     </ul>
                 </div>
 

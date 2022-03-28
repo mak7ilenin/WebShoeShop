@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         user.setFirstName("Maksim");
         user.setLastName("Dzjubenko");
         user.setPhone("53334005");
-        user.setMoney(122.2);
+        user.setMoney(500);
         user.setLogin("admin");
         PasswordProtected passwordProtected = new PasswordProtected();
         String salt = passwordProtected.getSalt();
@@ -138,6 +138,15 @@ public class LoginServlet extends HttpServlet {
                     request.setAttribute("info", "Одно или несколько полей не заполнены!");
                     request.getRequestDispatcher("/showSignUp").forward(request, response);
                     break;
+                }
+                List<User> usersList = userFacade.findAll();
+                for(User user : usersList) {
+                    System.out.println(user.getLogin());
+                    if(user.getLogin().equals(login)) {
+                        request.setAttribute("info", "Не удалось создать аккаунт!");
+                        request.getRequestDispatcher("/showSignUp").forward(request, response);
+                        break;
+                    }
                 }
                 User newUser = new User();
                 newUser.setFirstName(firstName);

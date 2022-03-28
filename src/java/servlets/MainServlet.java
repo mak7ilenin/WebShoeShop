@@ -35,6 +35,8 @@ import tools.PasswordProtected;
         
     "/showAddModel",
     "/addModel",
+    "/showOrderModelAmount",
+    "/orderModelAmount",
 
     "/addUser",
     
@@ -188,6 +190,16 @@ public class MainServlet extends HttpServlet {
                     request.getRequestDispatcher("/showAddModel").forward(request, response);
                     break;
                 }
+                break;
+            case "/showOrderModelAmount":
+                request.setAttribute("models", modelsList);
+                request.getRequestDispatcher("/WEB-INF/orderModelAmount.jsp").forward(request, response);
+                break;
+            case "/orderModelAmount":
+                Model amountModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
+                amountModel.setAmount(amountModel.getAmount() + Integer.parseInt(request.getParameter("amount")));
+                modelFacade.edit(amountModel);
+                request.getRequestDispatcher("/showOrderModelAmount").forward(request, response);
                 break;
             case "/addUser":
                 request.getRequestDispatcher("showSignUp").forward(request, response);
@@ -361,7 +373,6 @@ public class MainServlet extends HttpServlet {
                     authUser.setMoney(Double.parseDouble(request.getParameter("editMoney")));
                     userFacade.edit(authUser);
                     request.setAttribute("info", "Данные успешно сохранены!");
-                    break;
                 } catch (Exception e) {
                     request.setAttribute("info", "Не удалось изменить данные!");
                 }
