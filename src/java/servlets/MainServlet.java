@@ -5,7 +5,8 @@ import entity.Model;
 import entity.User;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +30,6 @@ import tools.PasswordProtected;
 @WebServlet(name = "MainServlet",urlPatterns = {
     "/showAdminPanel",
     "/setRole",
-    
-    "/showGain",
-    "/allGain",
-    "/gainForAMonth",
     
     "/showListModels",
         
@@ -125,20 +122,6 @@ public class MainServlet extends HttpServlet {
                 request.setAttribute("info", "Теперь " + chosenUser.getFirstName() + " имеет роль " + chosenRole);
                 request.getRequestDispatcher("/showAdminPanel").forward(request, response);
                 break;
-            case "/showGain":
-                List<History> histories = historyFacade.findAll();
-                Double sumGain = 0.0;
-                for (History history : histories) {
-                    sumGain = sumGain + history.getGain();
-                    System.out.println(sumGain);
-                }
-                request.setAttribute("allGain", "Заработок за всё время работы магазаниа: " + sumGain + "$");
-                request.getRequestDispatcher("/WEB-INF/gain.jsp").forward(request, response);
-                break;
-            case "/gain":
-                request.getParameter("")
-                request.getRequestDispatcher("/showGain").forward(request, response);
-                break;
             case "/showBuyModel":
                 request.setAttribute("users", usersList);
                 request.setAttribute("models", modelsList);
@@ -152,7 +135,7 @@ public class MainServlet extends HttpServlet {
                     history.setModel(buyModel);
                     history.setUser(authUser);
                     authUser.setMoney(authUser.getMoney() - buyModel.getPrice());
-                    history.setBuy(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    history.setBuy(Date.from(LocalDate.now().atTime(LocalTime.now().plusHours(date.getHours())).toInstant(ZoneOffset.UTC)));
                     history.setGain(history.getGain() + buyModel.getPrice());
                     buyModel.setAmount(buyModel.getAmount() - 1);
                     modelFacade.edit(buyModel);

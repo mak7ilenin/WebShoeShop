@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="w-100 d-flex justify-content-center">
     <form action="addModel" method="POST" >
-        <div class="card border-4 mb-0" style="width: 30em;">
+        <div class="card border-4 mb-0" style="width: 30em; border-color: white;">
             <h2 style="padding-bottom: 30px" class="my-4 w-100 d-flex justify-content-center">Запросить обувь у поставщика</h2>
             <div class="form-group">
                 <label for="modelName" class="form-label mt-4">Название</label>
