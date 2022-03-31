@@ -4,6 +4,8 @@ import entity.History;
 import entity.Model;
 import entity.User;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -11,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,10 +66,16 @@ import tools.PasswordProtected;
     "/buyModel",
     
 })
+
+
 public class MainServlet extends HttpServlet {
     @EJB ModelFacade modelFacade;
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
+    
+    public void getDateTimeNow(String time) {
+        String date = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(Calendar.getInstance().getTime());
+    }
     
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
@@ -137,7 +146,7 @@ public class MainServlet extends HttpServlet {
                     history.setModel(buyModel);
                     history.setUser(authUser);
                     authUser.setMoney(authUser.getMoney() - buyModel.getPrice());
-                    history.setBuy(Date.from(LocalDate.now().atTime(LocalTime.now().plusHours(date.getHours())).toInstant(ZoneOffset.UTC)));
+                    history.setBuy(Date.from(LocalDate.now().atTime(LocalTime.now().plusHours(date.getHours() - 13)).toInstant(ZoneOffset.UTC)));
                     history.setGain(history.getGain() + buyModel.getPrice());
                     buyModel.setAmount(buyModel.getAmount() - 1);
                     modelFacade.edit(buyModel);
