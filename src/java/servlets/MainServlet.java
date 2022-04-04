@@ -5,7 +5,6 @@ import entity.Model;
 import entity.User;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -13,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.TimeZone;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,6 +52,7 @@ import tools.PasswordProtected;
     "/showDeleteUser",
     
     "/showEditUserInfo",
+    "/chooseUserToEdit",
     "/editUserInfo",
     
     "/showEditMyInfo",
@@ -73,9 +72,6 @@ public class MainServlet extends HttpServlet {
     @EJB UserFacade userFacade;
     @EJB HistoryFacade historyFacade;
     
-    public void getDateTimeNow(String time) {
-        String date = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(Calendar.getInstance().getTime());
-    }
     
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
@@ -217,10 +213,13 @@ public class MainServlet extends HttpServlet {
                 request.setAttribute("models", modelsList);
                 request.getRequestDispatcher("/WEB-INF/editModel.jsp").forward(request, response);
                 break;
-//            case "/chooseModelToEdit":
-//                String editModelName = editModel.getModelName();
-//                request.setAttribute("editModelName", editModelName);
-//                request.getRequestDispatcher("/showEditModel").forward(request, response);
+            case "/chooseModelToEdit":
+                Model showEditModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
+                request.setAttribute("modelName", showEditModel.getModelName());
+                request.setAttribute("modelSize", showEditModel.getModelSize());
+                request.setAttribute("modelFirm", showEditModel.getModelFirm());
+                request.setAttribute("price", showEditModel.getPrice());
+                request.getRequestDispatcher("/showEditModel").forward(request, response);
             case "/editModel":      
                 Model editModel = modelFacade.find(Long.parseLong(request.getParameter("theModels")));
                 String editModelName = request.getParameter("editModelName");
@@ -300,9 +299,15 @@ public class MainServlet extends HttpServlet {
                 request.setAttribute("users", usersList);
                 request.getRequestDispatcher("/WEB-INF/editUserInfo.jsp").forward(request, response);
                 break;
+            case "/chooseUserToEdit":
+                User showEditUser = userFacade.find(Long.parseLong(request.getParameter("theEditUsers")));           
+                request.setAttribute("firstName", showEditUser.getFirstName());
+                request.setAttribute("lastName", showEditUser.getLastName());
+                request.setAttribute("phone", showEditUser.getPhone());
+                request.getRequestDispatcher("/showEditUserInfo").forward(request, response);
+                break;
             case "/editUserInfo":
-                User editUser = userFacade.find(Long.parseLong(request.getParameter("theUsers")));           
-                
+                User editUser = userFacade.find(Long.parseLong(request.getParameter("theUsers")));  
                 String editUserFirstName = request.getParameter("editUserFirstName");
                 String editUserLastName = request.getParameter("editUserLastName");
                 String editUserPhone = request.getParameter("editUserPhone");
@@ -328,6 +333,7 @@ public class MainServlet extends HttpServlet {
                 request.getRequestDispatcher("/showEditUserInfo").forward(request, response);
                 break;
             case "/showEditMyLogin":
+                request.setAttribute("login", authUser.getLogin());
                 request.getRequestDispatcher("/WEB-INF/editMyLogin.jsp").forward(request, response);
                 break;
             case "/editMyLogin":
@@ -360,19 +366,23 @@ public class MainServlet extends HttpServlet {
                 else {
                     request.setAttribute("info", "Пароли не совпадают");
                 }
+                request.setAttribute("login", authUser.getLogin());
                 request.getRequestDispatcher("/showEditMyLogin").forward(request, response);
                 break;
             case "/showEditMyInfo":
-                request.setAttribute("users", usersList);
+                request.setAttribute("firstName", authUser.getFirstName());
+                request.setAttribute("lastName", authUser.getLastName());
+                request.setAttribute("phone", authUser.getPhone());
+                request.setAttribute("money", authUser.getMoney());
                 request.getRequestDispatcher("/WEB-INF/editMyInfo.jsp").forward(request, response);
                 break;
             case "/editMyInfo":
                 if (request.getParameter("editFirstName").isEmpty() || 
                         request.getParameter("editLastName").isEmpty() || 
                         request.getParameter("editPhone").isEmpty() ||
-                        request.getParameter("editMoney").isEmpty()){
+                        request.getParameter("editMoney") == null){
                     request.setAttribute("info", "Заполните все поля!");
-                    request.getRequestDispatcher("showEditMyInfo.jsp").forward(request, response);
+                    request.getRequestDispatcher("showEditMyInfo").forward(request, response);
                     break;
                 }
                 try {
