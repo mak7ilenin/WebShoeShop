@@ -69,62 +69,97 @@ public class GainServlet extends HttpServlet {
                 break;
             }
         double gainForAMonth = 0.0;
-        for (History history : historiesList) {
-            switch (path) {
-                case "/gainForJanuary":
+        switch (path) {
+            case "/gainForJanuary":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 0) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForFebruary":
+                }
+                break;
+            case "/gainForFebruary":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 1) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForMarch":
+                }
+                break;
+            case "/gainForMarch":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 2) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForApril":
+                }
+                break;
+            case "/gainForApril":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 3) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForMay":
+                }
+                break;
+            case "/gainForMay":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 4) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForJune":
+                }
+                break;
+            case "/gainForJune":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 5) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForJuly":
+                }
+                break;
+            case "/gainForJuly":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 6) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForAugust":
+                }
+                break;
+            case "/gainForAugust":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 7) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForSeptember":
+                }
+                break;
+            case "/gainForSeptember":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 8) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForOctober":
+                }
+                break;
+            case "/gainForOctober":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 9) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForNovember":
+                }
+                break;
+            case "/gainForNovember":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 10) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-                case "/gainForDecember":
+                }
+                break;
+            case "/gainForDecember":
+                for (History history : historiesList) {
                     if (history.getBuy().getMonth() == 11) {
                         gainForAMonth = gainForAMonth + history.getGain();
                     }
-            }
+                }
+                break;
+        }  
+            request.setAttribute("gainForAMonth", gainForAMonth + "$");
+            request.getRequestDispatcher("/showGain").forward(request, response);
         }
 
-        request.setAttribute("gainForAMonth", gainForAMonth + "$");
-        request.getRequestDispatcher("/showGain").forward(request, response); 
-    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
